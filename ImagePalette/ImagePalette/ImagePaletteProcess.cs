@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ImagePalette
 {
+    public delegate void ImageChangedHandler(object sender);
+
     /// <summary>
     /// Class that does the processing.
     /// </summary>
@@ -34,12 +38,14 @@ namespace ImagePalette
         public Image CurrentImageIndexed { get; private set; }
 
         // Events raised in this class
-        public delegate void ImageChanged(Image image);
-        public event ImageChanged imageChangedEvent = null;
+        public event ImageChangedHandler ImageChangedEvent;
 
         public ImagePaletteProcess(ImagePaletteParameters parameters)
         {
             Parameters = parameters;
+
+            // Register for events when properties are modified
+            Parameters.PropertyChanged += new PropertyChangedEventHandler(imagePaletteParameters_PropertyChanged);
 
             // Get the files to process
             FileNames = new List<string>();
@@ -153,6 +159,21 @@ namespace ImagePalette
             return rgb;
         }
 
+        protected void imagePaletteParameters_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.Assert(object.ReferenceEquals(sender, Parameters));
+
+            // Util.GetMemberInfo in order to have strong typed info in case of code refactoring
+            if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.ThresholdIndexed).Name))
+            {
+                GetIndexedTable(Parameters.ApplyThresholdIndexed);
+            }
+            else if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdIndexed).Name))
+            {
+                GetIndexedTable(Parameters.ApplyThresholdIndexed);
+            }
+        }
+
         /// <summary>
         /// Calculates the distance between two colors, adjusted for the human eye.
         /// More details on the theory here: http://www.compuphase.com/cmetric.htm
@@ -190,13 +211,12 @@ namespace ImagePalette
 
             if (!string.IsNullOrWhiteSpace(Parameters.FileName))
             {
-                FileAttributes attr = File.GetAttributes(Parameters.FileName);
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                if (Directory.Exists(Parameters.FileName))
                 {
                     // Directory
                     FileNames.AddRange(Directory.GetFiles(Parameters.FileName));
                 }
-                else if ((attr & FileAttributes.Normal) == FileAttributes.Normal)
+                else if (File.Exists(Parameters.FileName))
                 {
                     // File
                     FileNames.Add(Parameters.FileName);
@@ -271,20 +291,26 @@ namespace ImagePalette
         {
             if (forceReprocess || !currentImageIsProcessed)
             {
-                if (DataTableIndexed == null || DataTableIndexed.Rows.Count == 0 || DataTableLoaded == null || DataTableLoaded.Rows.Count == 0)
-                    throw new Exception("Need to have both the indexed and loaded colors to match by distance.");
+                try
+                {
+                    // Load image
+                    CurrentImageOriginal = new Bitmap(CurrentFileName);
+                    if (CurrentImageOriginal == null)
+                        throw new Exception("Error reading image.");
 
-                // Load image
-                CurrentImageOriginal = new Bitmap(CurrentFileName);
-                if (CurrentImageOriginal == null)
-                    throw new Exception("Error reading image.");
-
-                // Convert to indexed image
-                MemoryStream bitStream = new MemoryStream();
-                CurrentImageOriginal.Save(bitStream, ImageFormat.Gif);
-                CurrentImageIndexed = new Bitmap(bitStream);
-                if (CurrentImageIndexed == null)
-                    throw new Exception("Error converting to indexed image.");
+                    // Convert to indexed image
+                    MemoryStream bitStream = new MemoryStream();
+                    CurrentImageOriginal.Save(bitStream, ImageFormat.Gif);
+                    CurrentImageIndexed = new Bitmap(bitStream);
+                    if (CurrentImageIndexed == null)
+                        throw new Exception("Error converting to indexed image.");
+                }
+                finally
+                {
+                    // Fire event stating that images changed
+                    if (ImageChangedEvent != null)
+                        ImageChangedEvent(this);
+                }
 
                 // Index colors from image
                 // Hashtable has faster operation than DataTable
@@ -327,7 +353,7 @@ namespace ImagePalette
                 DataTableIndexed.DefaultView.Sort = PaletteGridColumns.Count + " DESC";
             }
 
-            DataTableIndexed.DefaultView.RowFilter = applyThreshold ? string.Format("{0} >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdIndexed) : null;
+            DataTableIndexed.DefaultView.RowFilter = applyThreshold ? string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdIndexed) : null;
 
             return DataTableIndexed;
         }
@@ -336,8 +362,11 @@ namespace ImagePalette
         {
             if (forceReprocess || !currentImageIsProcessed)
             {
+                if (DataTableIndexed == null || DataTableIndexed.Rows.Count == 0 || DataTableLoaded == null || DataTableLoaded.Rows.Count == 0)
+                    throw new Exception("Need to have both the indexed and loaded colors to match by distance.");
 
-                DataTableMatched.DefaultView.RowFilter = applyThreshold ? string.Format("{0} >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdMatched) : null;
+
+                DataTableMatched.DefaultView.RowFilter = applyThreshold ? string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdMatched) : null;
             }
 
             return DataTableMatched;

@@ -12,20 +12,20 @@ namespace ImagePalette
 {
     public partial class FormImage : Form
     {
-        private string title;
-        private Image image;
-
-        public FormImage(string title, Image image)
+        public FormImage(string title)
         {
             InitializeComponent();
-            this.title = title;
-            this.image = image;
+            Text = title;
         }
 
         private void FormImage_Load(object sender, EventArgs e)
         {
-            Text = title;
-            pictureBox.Image = image;
+        }
+
+        public Image Image
+        {
+            get { return pictureBox.Image; }
+            set { pictureBox.Image = value; }
         }
     }
 }
