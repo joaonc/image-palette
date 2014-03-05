@@ -21,25 +21,7 @@ namespace ImagePalette
         {
             InitializeComponent();
         }
-/*
-        public PaletteGrid(DataTable dt)
-        {
-            InitializeComponent();
-            DataTable = dt;
-        }
 
-        public DataTable DataTable
-        {
-            get { return (DataTable)dataGridView.DataSource; }
-            set
-            {
-                if (value != null)
-                    VerifyColumns(value);
-
-                dataGridView.DataSource = value;
-            }
-        }
-*/
         public DataGridView DataGridView
         {
             get { return dataGridView; }
@@ -71,8 +53,18 @@ namespace ImagePalette
             {
                 if (col.Name.Equals(PaletteGridColumns.Count) || col.Name.Equals(PaletteGridColumns.Hex))
                     col.Width = 50;
-                else if (col.Name.Equals(PaletteGridColumns.Color))
-                    col.Width = 35;
+                else if (col.Name.Equals(PaletteGridColumns.Color) || col.Name.Equals(PaletteGridColumns.Match))
+                    col.Width = 40;
+                else if (col.Name.Equals(PaletteGridColumns.Distance))
+                {
+                    col.Width = 40;
+                    col.DefaultCellStyle.Format = "0";
+                }
+                else if (col.Name.Equals(PaletteGridColumns.Percentage))
+                {
+                    col.Width = 30;
+                    col.DefaultCellStyle.Format = "0.00";
+                }
                 else
                     col.Width = 30;
 

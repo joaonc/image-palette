@@ -84,11 +84,11 @@ namespace ImagePalette
             set { SetProperty<int>(ref distance, value); }
         }
 
-        private int thresholdIndexed;
-        public int ThresholdIndexed
+        private double thresholdIndexed;
+        public double ThresholdIndexed
         {
             get { return thresholdIndexed; }
-            set { SetProperty<int>(ref thresholdIndexed, value); }
+            set { SetProperty<double>(ref thresholdIndexed, value); }
         }
 
         private int thresholdMatched;

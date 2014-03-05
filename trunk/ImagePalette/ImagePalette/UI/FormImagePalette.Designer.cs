@@ -36,6 +36,9 @@
             this.textBoxFileNameReference = new System.Windows.Forms.TextBox();
             this.checkBoxIncludeReference = new System.Windows.Forms.CheckBox();
             this.groupBoxReference = new System.Windows.Forms.GroupBox();
+            this.labelThresholdIndexedPercent = new System.Windows.Forms.Label();
+            this.numericUpDownThresholdIndexed = new System.Windows.Forms.NumericUpDown();
+            this.labelThresholdIndexed = new System.Windows.Forms.Label();
             this.labelThresholdMatchedPercent = new System.Windows.Forms.Label();
             this.numericUpDownThresholdMatched = new System.Windows.Forms.NumericUpDown();
             this.labelThresholdMatched = new System.Windows.Forms.Label();
@@ -44,14 +47,11 @@
             this.labelCoverage = new System.Windows.Forms.Label();
             this.numericUpDownCoverage = new System.Windows.Forms.NumericUpDown();
             this.labelCoveragePercentage = new System.Windows.Forms.Label();
-            this.labelThresholdIndexed = new System.Windows.Forms.Label();
-            this.numericUpDownThresholdIndexed = new System.Windows.Forms.NumericUpDown();
-            this.labelThresholdIndexedPercent = new System.Windows.Forms.Label();
             this.groupBoxReference.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdMatched)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDistance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCoverage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).BeginInit();
             this.SuspendLayout();
             // 
             // labelFileOrDirectory
@@ -153,6 +153,37 @@
             this.groupBoxReference.TabStop = false;
             this.groupBoxReference.Text = "Reference Palette";
             // 
+            // labelThresholdIndexedPercent
+            // 
+            this.labelThresholdIndexedPercent.AutoSize = true;
+            this.labelThresholdIndexedPercent.Location = new System.Drawing.Point(182, 107);
+            this.labelThresholdIndexedPercent.Name = "labelThresholdIndexedPercent";
+            this.labelThresholdIndexedPercent.Size = new System.Drawing.Size(15, 13);
+            this.labelThresholdIndexedPercent.TabIndex = 6;
+            this.labelThresholdIndexedPercent.Text = "%";
+            // 
+            // numericUpDownThresholdIndexed
+            // 
+            this.numericUpDownThresholdIndexed.DecimalPlaces = 2;
+            this.numericUpDownThresholdIndexed.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericUpDownThresholdIndexed.Location = new System.Drawing.Point(113, 105);
+            this.numericUpDownThresholdIndexed.Name = "numericUpDownThresholdIndexed";
+            this.numericUpDownThresholdIndexed.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDownThresholdIndexed.TabIndex = 5;
+            // 
+            // labelThresholdIndexed
+            // 
+            this.labelThresholdIndexed.AutoSize = true;
+            this.labelThresholdIndexed.Location = new System.Drawing.Point(5, 107);
+            this.labelThresholdIndexed.Name = "labelThresholdIndexed";
+            this.labelThresholdIndexed.Size = new System.Drawing.Size(95, 13);
+            this.labelThresholdIndexed.TabIndex = 4;
+            this.labelThresholdIndexed.Text = "Threshold Indexed";
+            // 
             // labelThresholdMatchedPercent
             // 
             this.labelThresholdMatchedPercent.AutoSize = true;
@@ -186,6 +217,11 @@
             // numericUpDownDistance
             // 
             this.numericUpDownDistance.Location = new System.Drawing.Point(113, 76);
+            this.numericUpDownDistance.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.numericUpDownDistance.Name = "numericUpDownDistance";
             this.numericUpDownDistance.Size = new System.Drawing.Size(63, 20);
             this.numericUpDownDistance.TabIndex = 3;
@@ -234,31 +270,6 @@
             this.labelCoveragePercentage.TabIndex = 4;
             this.labelCoveragePercentage.Text = "%";
             // 
-            // labelThresholdIndexed
-            // 
-            this.labelThresholdIndexed.AutoSize = true;
-            this.labelThresholdIndexed.Location = new System.Drawing.Point(5, 107);
-            this.labelThresholdIndexed.Name = "labelThresholdIndexed";
-            this.labelThresholdIndexed.Size = new System.Drawing.Size(95, 13);
-            this.labelThresholdIndexed.TabIndex = 4;
-            this.labelThresholdIndexed.Text = "Threshold Indexed";
-            // 
-            // numericUpDownThresholdIndexed
-            // 
-            this.numericUpDownThresholdIndexed.Location = new System.Drawing.Point(113, 105);
-            this.numericUpDownThresholdIndexed.Name = "numericUpDownThresholdIndexed";
-            this.numericUpDownThresholdIndexed.Size = new System.Drawing.Size(63, 20);
-            this.numericUpDownThresholdIndexed.TabIndex = 5;
-            // 
-            // labelThresholdIndexedPercent
-            // 
-            this.labelThresholdIndexedPercent.AutoSize = true;
-            this.labelThresholdIndexedPercent.Location = new System.Drawing.Point(182, 107);
-            this.labelThresholdIndexedPercent.Name = "labelThresholdIndexedPercent";
-            this.labelThresholdIndexedPercent.Size = new System.Drawing.Size(15, 13);
-            this.labelThresholdIndexedPercent.TabIndex = 6;
-            this.labelThresholdIndexedPercent.Text = "%";
-            // 
             // FormImagePalette
             // 
             this.AcceptButton = this.buttonGo;
@@ -280,10 +291,10 @@
             this.Load += new System.EventHandler(this.FormImagePalette_Load);
             this.groupBoxReference.ResumeLayout(false);
             this.groupBoxReference.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdMatched)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDistance)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCoverage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
