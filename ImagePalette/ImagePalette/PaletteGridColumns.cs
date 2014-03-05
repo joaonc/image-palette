@@ -6,7 +6,7 @@ using System.Text;
 namespace ImagePalette
 {
     /// <summary>
-    /// Name of columns in PaletteGrid
+    /// Name of possible columns in PaletteGrid
     /// </summary>
     public static class PaletteGridColumns
     {
@@ -17,6 +17,7 @@ namespace ImagePalette
         public static string Hex = "Hex";
         public static string Color = "Color";
         public static string Count = "Count";
+        public static string Percentage = "%";
 
         /// <summary>
         /// Gets all the column names defined in this class.

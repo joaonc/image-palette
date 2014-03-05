@@ -21,7 +21,7 @@ namespace ImagePalette
         {
             InitializeComponent();
         }
-
+/*
         public PaletteGrid(DataTable dt)
         {
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace ImagePalette
                 dataGridView.DataSource = value;
             }
         }
-
+*/
         public DataGridView DataGridView
         {
             get { return dataGridView; }

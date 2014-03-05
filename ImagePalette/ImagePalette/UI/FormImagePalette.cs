@@ -27,16 +27,18 @@ namespace ImagePalette
             parameters.FileNameReference = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\colors.pal";
             parameters.Coverage = 100;
             parameters.Distance = 20;
+            parameters.ThresholdMatched = 10;
             parameters.ThresholdIndexed = 10;
 
-            // Set bindings
+            // Set UI bindings
             try
             {
                 textBoxFileName.DataBindings.Add("Text", parameters, "FileName");
                 textBoxFileNameReference.DataBindings.Add("Text", parameters, "FileNameReference");
                 numericUpDownCoverage.DataBindings.Add("Value", parameters, "Coverage");
                 numericUpDownDistance.DataBindings.Add("Value", parameters, "Distance");
-                numericUpDownThreshold.DataBindings.Add("Value", parameters, "Threshold");
+                numericUpDownThresholdIndexed.DataBindings.Add("Value", parameters, "ThresholdIndexed");
+                numericUpDownThresholdMatched.DataBindings.Add("Value", parameters, "ThresholdMatched");
             }
             catch (Exception ex)
             {

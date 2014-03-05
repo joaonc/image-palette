@@ -16,9 +16,6 @@ namespace ImagePalette
     {
         public ImagePaletteProcess PaletteProcessor { get; private set; }
 
-        Hashtable indexedFromImage;
-        DataTable dtIndexedFromImage;
-
         public FormImagePaletteProcess(ImagePaletteParameters parameters)
         {
             InitializeComponent();
@@ -28,19 +25,12 @@ namespace ImagePalette
         private void FormImageOriginal_Load(object sender, EventArgs e)
         {
             SetBindings();
-            LoadPalette();
-            Process();
+            PaletteProcessor.ProcessCurrentImage();
         }
 
         ImagePaletteParameters Parameters
         {
             get { return PaletteProcessor.Parameters; }
-            //set
-            //{
-            //    SetBindings();
-            //    pictureBoxOriginal.Image = null;
-            //    pictureBoxIndexed.Image = null;
-            //}
         }
 
         private void SetBindings()
@@ -48,7 +38,13 @@ namespace ImagePalette
             // Set bindings between the UI and variables
             try
             {
-                numericUpDownDistance.DataBindings.Add("Value", Parameters, "Distance");
+                numericUpDownDistance.DataBindings.Add("Value", PaletteProcessor.Parameters, "Distance");
+                numericUpDownThresholdIndexed.DataBindings.Add("Value", PaletteProcessor.Parameters, "ThresholdIndexed");
+                numericUpDownThresholdMatched.DataBindings.Add("Value", PaletteProcessor.Parameters, "ThresholdMatched");
+                paletteGridIndexed.DataGridView.DataSource = PaletteProcessor.DataTableIndexed.DefaultView;
+                paletteGridLoaded.DataGridView.DataSource = PaletteProcessor.DataTableLoaded.DefaultView;
+                paletteGridMatched.DataGridView.DataSource = PaletteProcessor.DataTableMatched.DefaultView;
+                pictureBoxOriginal.Image = PaletteProcessor.CurrentImageOriginal;
             }
             catch (Exception ex)
             {
@@ -56,149 +52,27 @@ namespace ImagePalette
             }
         }
 
-        private void LoadPalette()
-        {
-            if (!string.IsNullOrWhiteSpace(Parameters.FileNameReference))
-            {
-                DataTable dtPalette = new DataTable("Loaded as Reference");
-                dtPalette.Columns.AddRange(new DataColumn[] {
-                    new DataColumn(PaletteGridColumns.Color, typeof(string)),
-                    new DataColumn(PaletteGridColumns.R, typeof(int)),
-                    new DataColumn(PaletteGridColumns.G, typeof(int)),
-                    new DataColumn(PaletteGridColumns.B, typeof(int)),
-                    new DataColumn(PaletteGridColumns.A, typeof(int))
-                });
-
-                HashSet<Color> palette = new PaletteReader(Parameters.FileNameReference).GetPalette();
-                if (palette != null && palette.Count > 0)
-                {
-                    foreach (Color color in palette)
-                    {
-                        DataRow row = dtPalette.NewRow();
-                        row["R"] = color.R;
-                        row["G"] = color.G;
-                        row["B"] = color.B;
-                        row["A"] = color.A;
-
-                        dtPalette.Rows.Add(row);
-                    }
-                }
-
-                paletteGridLoaded.DataTable = dtPalette;  
-            }
-        }
-
-        private void Process()
-        {
-            LoadImage(Parameters.FileName);
-            ConvertToIndexedImage();
-            IndexColorsFromImage();
-
-            UpdateUI();
-
-            MatchColorsByDistance();
-        }
-
         private void buttonOk_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void LoadImage(string fileName)
-        {
-            pictureBoxOriginal.Load(fileName);
-        }
-
-        private void ConvertToIndexedImage()
-        {
-            if (pictureBoxOriginal.Image == null)
-                return;
-
-            MemoryStream bitStream = new MemoryStream();
-            pictureBoxOriginal.Image.Save(bitStream, ImageFormat.Gif);
-            pictureBoxIndexed.Image = new Bitmap(bitStream);
-        }
-
-        private void IndexColorsFromImage()
-        {
-            if (pictureBoxIndexed.Image == null)
-                return;
-
-            Bitmap image = (Bitmap)pictureBoxIndexed.Image;
-            indexedFromImage = new Hashtable();
-
-            for (int x = 0; x < image.Width; x++)
-            {
-                for (int y = 0; y < image.Height; y++)
-                {
-                    Color color = image.GetPixel(x, y);
-                    if (indexedFromImage[color] == null)
-                        indexedFromImage[color] = 1;
-                    else
-                        indexedFromImage[color] = (int)indexedFromImage[color] + 1;
-                }
-            }
-        }
-
-        private void MatchColorsByDistance()
-        {
-            if (paletteGridIndexed.DataTable == null || paletteGridLoaded.DataTable == null)
-                throw new Exception("Need to have both the indexed and loaded colors to match by distance.");
-
-            ImagePaletteProcess process = new ImagePaletteProcess(Parameters);
-            foreach (Color cIndexed in paletteGridIndexed.GetAllColors())
-            {
-                foreach (Color cLoaded in paletteGridLoaded.GetAllColors())
-                {
-                    //if (process.IsWithinDistance)
-                    //{
-                    //}
-                }
-            }
-        }
-
-        private void UpdateUI()
-        {
-            dtIndexedFromImage = new DataTable("Indexed From Image");
-            dtIndexedFromImage.Columns.AddRange(new DataColumn[] {
-                new DataColumn(PaletteGridColumns.Color, typeof(string)),
-                new DataColumn(PaletteGridColumns.R, typeof(int)),
-                new DataColumn(PaletteGridColumns.G, typeof(int)),
-                new DataColumn(PaletteGridColumns.B, typeof(int)),
-                new DataColumn(PaletteGridColumns.A, typeof(int)),
-                new DataColumn(PaletteGridColumns.Count, typeof(int))
-            });
-
-            foreach (DictionaryEntry entry in indexedFromImage)
-            {
-                Color color = (Color)entry.Key;
-                int count = (int)entry.Value;
-
-                DataRow row = dtIndexedFromImage.NewRow();
-                row[PaletteGridColumns.R] = color.R;
-                row[PaletteGridColumns.G] = color.G;
-                row[PaletteGridColumns.B] = color.B;
-                row[PaletteGridColumns.A] = color.A;
-                row[PaletteGridColumns.Count] = count;
-
-                dtIndexedFromImage.Rows.Add(row);
-            }
-
-            dtIndexedFromImage.DefaultView.Sort = PaletteGridColumns.Count + " DESC";
-            paletteGridIndexed.DataTable = dtIndexedFromImage.DefaultView.ToTable(dtIndexedFromImage.TableName);
-        }
-
-
         private void pictureBoxOriginal_Click(object sender, EventArgs e)
         {
-            FormImage formImage = new FormImage("Original", pictureBoxOriginal.Image);
-            formImage.Show();
+            if (pictureBoxOriginal.Image != null)
+            {
+                FormImage formImage = new FormImage("Original", pictureBoxOriginal.Image);
+                formImage.Show();
+            }
         }
 
         private void pictureBoxIndexed_Click(object sender, EventArgs e)
         {
-            FormImage formImage = new FormImage("Indexed", pictureBoxIndexed.Image);
-            formImage.Show();
+            if (pictureBoxIndexed.Image != null)
+            {
+                FormImage formImage = new FormImage("Indexed", pictureBoxIndexed.Image);
+                formImage.Show();
+            }
         }
 
         private void buttonPrevious_Click(object sender, EventArgs e)

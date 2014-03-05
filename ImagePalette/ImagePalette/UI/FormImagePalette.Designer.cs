@@ -36,18 +36,22 @@
             this.textBoxFileNameReference = new System.Windows.Forms.TextBox();
             this.checkBoxIncludeReference = new System.Windows.Forms.CheckBox();
             this.groupBoxReference = new System.Windows.Forms.GroupBox();
-            this.labelColorDistance = new System.Windows.Forms.Label();
+            this.labelThresholdMatchedPercent = new System.Windows.Forms.Label();
+            this.numericUpDownThresholdMatched = new System.Windows.Forms.NumericUpDown();
+            this.labelThresholdMatched = new System.Windows.Forms.Label();
             this.numericUpDownDistance = new System.Windows.Forms.NumericUpDown();
-            this.labelColorThreshold = new System.Windows.Forms.Label();
-            this.numericUpDownThreshold = new System.Windows.Forms.NumericUpDown();
-            this.labelColorThresholdPercent = new System.Windows.Forms.Label();
+            this.labelDistance = new System.Windows.Forms.Label();
             this.labelCoverage = new System.Windows.Forms.Label();
             this.numericUpDownCoverage = new System.Windows.Forms.NumericUpDown();
             this.labelCoveragePercentage = new System.Windows.Forms.Label();
+            this.labelThresholdIndexed = new System.Windows.Forms.Label();
+            this.numericUpDownThresholdIndexed = new System.Windows.Forms.NumericUpDown();
+            this.labelThresholdIndexedPercent = new System.Windows.Forms.Label();
             this.groupBoxReference.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdMatched)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDistance)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCoverage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).BeginInit();
             this.SuspendLayout();
             // 
             // labelFileOrDirectory
@@ -77,7 +81,7 @@
             this.buttonGo.Location = new System.Drawing.Point(371, 315);
             this.buttonGo.Name = "buttonGo";
             this.buttonGo.Size = new System.Drawing.Size(75, 23);
-            this.buttonGo.TabIndex = 2;
+            this.buttonGo.TabIndex = 7;
             this.buttonGo.Text = "Go";
             this.buttonGo.UseVisualStyleBackColor = true;
             this.buttonGo.Click += new System.EventHandler(this.buttonGo_Click);
@@ -89,7 +93,7 @@
             this.buttonExit.Location = new System.Drawing.Point(452, 315);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(75, 23);
-            this.buttonExit.TabIndex = 3;
+            this.buttonExit.TabIndex = 8;
             this.buttonExit.Text = "Exit";
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
@@ -100,7 +104,7 @@
             this.labelReferencePaletteFile.Location = new System.Drawing.Point(6, 28);
             this.labelReferencePaletteFile.Name = "labelReferencePaletteFile";
             this.labelReferencePaletteFile.Size = new System.Drawing.Size(76, 13);
-            this.labelReferencePaletteFile.TabIndex = 4;
+            this.labelReferencePaletteFile.TabIndex = 0;
             this.labelReferencePaletteFile.Text = "Reference File";
             // 
             // textBoxFileNameReference
@@ -111,7 +115,7 @@
             this.textBoxFileNameReference.Location = new System.Drawing.Point(6, 44);
             this.textBoxFileNameReference.Name = "textBoxFileNameReference";
             this.textBoxFileNameReference.Size = new System.Drawing.Size(502, 20);
-            this.textBoxFileNameReference.TabIndex = 5;
+            this.textBoxFileNameReference.TabIndex = 1;
             this.textBoxFileNameReference.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBoxFileNameReference_DragDrop);
             this.textBoxFileNameReference.DragOver += new System.Windows.Forms.DragEventHandler(this.textBoxFileNameReference_DragOver);
             // 
@@ -123,7 +127,7 @@
             this.checkBoxIncludeReference.Location = new System.Drawing.Point(12, 100);
             this.checkBoxIncludeReference.Name = "checkBoxIncludeReference";
             this.checkBoxIncludeReference.Size = new System.Drawing.Size(150, 17);
-            this.checkBoxIncludeReference.TabIndex = 6;
+            this.checkBoxIncludeReference.TabIndex = 5;
             this.checkBoxIncludeReference.Text = "Include Reference Palette";
             this.checkBoxIncludeReference.UseVisualStyleBackColor = true;
             this.checkBoxIncludeReference.CheckedChanged += new System.EventHandler(this.checkBoxIncludeReference_CheckedChanged);
@@ -132,65 +136,68 @@
             // 
             this.groupBoxReference.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxReference.Controls.Add(this.labelColorThresholdPercent);
-            this.groupBoxReference.Controls.Add(this.numericUpDownThreshold);
-            this.groupBoxReference.Controls.Add(this.labelColorThreshold);
+            this.groupBoxReference.Controls.Add(this.labelThresholdIndexedPercent);
+            this.groupBoxReference.Controls.Add(this.numericUpDownThresholdIndexed);
+            this.groupBoxReference.Controls.Add(this.labelThresholdIndexed);
+            this.groupBoxReference.Controls.Add(this.labelThresholdMatchedPercent);
+            this.groupBoxReference.Controls.Add(this.numericUpDownThresholdMatched);
+            this.groupBoxReference.Controls.Add(this.labelThresholdMatched);
             this.groupBoxReference.Controls.Add(this.numericUpDownDistance);
-            this.groupBoxReference.Controls.Add(this.labelColorDistance);
+            this.groupBoxReference.Controls.Add(this.labelDistance);
             this.groupBoxReference.Controls.Add(this.labelReferencePaletteFile);
             this.groupBoxReference.Controls.Add(this.textBoxFileNameReference);
             this.groupBoxReference.Location = new System.Drawing.Point(12, 123);
             this.groupBoxReference.Name = "groupBoxReference";
             this.groupBoxReference.Size = new System.Drawing.Size(514, 165);
-            this.groupBoxReference.TabIndex = 7;
+            this.groupBoxReference.TabIndex = 6;
             this.groupBoxReference.TabStop = false;
             this.groupBoxReference.Text = "Reference Palette";
             // 
-            // labelColorDistance
+            // labelThresholdMatchedPercent
             // 
-            this.labelColorDistance.AutoSize = true;
-            this.labelColorDistance.Location = new System.Drawing.Point(5, 78);
-            this.labelColorDistance.Name = "labelColorDistance";
-            this.labelColorDistance.Size = new System.Drawing.Size(76, 13);
-            this.labelColorDistance.TabIndex = 6;
-            this.labelColorDistance.Text = "Color Distance";
+            this.labelThresholdMatchedPercent.AutoSize = true;
+            this.labelThresholdMatchedPercent.Location = new System.Drawing.Point(182, 136);
+            this.labelThresholdMatchedPercent.Name = "labelThresholdMatchedPercent";
+            this.labelThresholdMatchedPercent.Size = new System.Drawing.Size(15, 13);
+            this.labelThresholdMatchedPercent.TabIndex = 9;
+            this.labelThresholdMatchedPercent.Text = "%";
             // 
-            // numericUpDownDistance
+            // numericUpDownThresholdMatched
             // 
-            this.numericUpDownDistance.Location = new System.Drawing.Point(87, 76);
-            this.numericUpDownDistance.Name = "numericUpDownDistance";
-            this.numericUpDownDistance.Size = new System.Drawing.Size(63, 20);
-            this.numericUpDownDistance.TabIndex = 7;
-            // 
-            // labelColorThreshold
-            // 
-            this.labelColorThreshold.AutoSize = true;
-            this.labelColorThreshold.Location = new System.Drawing.Point(6, 106);
-            this.labelColorThreshold.Name = "labelColorThreshold";
-            this.labelColorThreshold.Size = new System.Drawing.Size(54, 13);
-            this.labelColorThreshold.TabIndex = 8;
-            this.labelColorThreshold.Text = "Threshold";
-            // 
-            // numericUpDownThreshold
-            // 
-            this.numericUpDownThreshold.Location = new System.Drawing.Point(87, 104);
-            this.numericUpDownThreshold.Name = "numericUpDownThreshold";
-            this.numericUpDownThreshold.Size = new System.Drawing.Size(63, 20);
-            this.numericUpDownThreshold.TabIndex = 9;
-            this.numericUpDownThreshold.Value = new decimal(new int[] {
+            this.numericUpDownThresholdMatched.Location = new System.Drawing.Point(113, 134);
+            this.numericUpDownThresholdMatched.Name = "numericUpDownThresholdMatched";
+            this.numericUpDownThresholdMatched.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDownThresholdMatched.TabIndex = 8;
+            this.numericUpDownThresholdMatched.Value = new decimal(new int[] {
             10,
             0,
             0,
             0});
             // 
-            // labelColorThresholdPercent
+            // labelThresholdMatched
             // 
-            this.labelColorThresholdPercent.AutoSize = true;
-            this.labelColorThresholdPercent.Location = new System.Drawing.Point(156, 106);
-            this.labelColorThresholdPercent.Name = "labelColorThresholdPercent";
-            this.labelColorThresholdPercent.Size = new System.Drawing.Size(15, 13);
-            this.labelColorThresholdPercent.TabIndex = 10;
-            this.labelColorThresholdPercent.Text = "%";
+            this.labelThresholdMatched.AutoSize = true;
+            this.labelThresholdMatched.Location = new System.Drawing.Point(5, 136);
+            this.labelThresholdMatched.Name = "labelThresholdMatched";
+            this.labelThresholdMatched.Size = new System.Drawing.Size(99, 13);
+            this.labelThresholdMatched.TabIndex = 7;
+            this.labelThresholdMatched.Text = "Threshold Matched";
+            // 
+            // numericUpDownDistance
+            // 
+            this.numericUpDownDistance.Location = new System.Drawing.Point(113, 76);
+            this.numericUpDownDistance.Name = "numericUpDownDistance";
+            this.numericUpDownDistance.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDownDistance.TabIndex = 3;
+            // 
+            // labelDistance
+            // 
+            this.labelDistance.AutoSize = true;
+            this.labelDistance.Location = new System.Drawing.Point(5, 78);
+            this.labelDistance.Name = "labelDistance";
+            this.labelDistance.Size = new System.Drawing.Size(76, 13);
+            this.labelDistance.TabIndex = 2;
+            this.labelDistance.Text = "Color Distance";
             // 
             // labelCoverage
             // 
@@ -198,7 +205,7 @@
             this.labelCoverage.Location = new System.Drawing.Point(12, 59);
             this.labelCoverage.Name = "labelCoverage";
             this.labelCoverage.Size = new System.Drawing.Size(53, 13);
-            this.labelCoverage.TabIndex = 8;
+            this.labelCoverage.TabIndex = 2;
             this.labelCoverage.Text = "Coverage";
             // 
             // numericUpDownCoverage
@@ -211,7 +218,7 @@
             0});
             this.numericUpDownCoverage.Name = "numericUpDownCoverage";
             this.numericUpDownCoverage.Size = new System.Drawing.Size(63, 20);
-            this.numericUpDownCoverage.TabIndex = 9;
+            this.numericUpDownCoverage.TabIndex = 3;
             this.numericUpDownCoverage.Value = new decimal(new int[] {
             100,
             0,
@@ -224,8 +231,33 @@
             this.labelCoveragePercentage.Location = new System.Drawing.Point(168, 59);
             this.labelCoveragePercentage.Name = "labelCoveragePercentage";
             this.labelCoveragePercentage.Size = new System.Drawing.Size(15, 13);
-            this.labelCoveragePercentage.TabIndex = 10;
+            this.labelCoveragePercentage.TabIndex = 4;
             this.labelCoveragePercentage.Text = "%";
+            // 
+            // labelThresholdIndexed
+            // 
+            this.labelThresholdIndexed.AutoSize = true;
+            this.labelThresholdIndexed.Location = new System.Drawing.Point(5, 107);
+            this.labelThresholdIndexed.Name = "labelThresholdIndexed";
+            this.labelThresholdIndexed.Size = new System.Drawing.Size(95, 13);
+            this.labelThresholdIndexed.TabIndex = 4;
+            this.labelThresholdIndexed.Text = "Threshold Indexed";
+            // 
+            // numericUpDownThresholdIndexed
+            // 
+            this.numericUpDownThresholdIndexed.Location = new System.Drawing.Point(113, 105);
+            this.numericUpDownThresholdIndexed.Name = "numericUpDownThresholdIndexed";
+            this.numericUpDownThresholdIndexed.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDownThresholdIndexed.TabIndex = 5;
+            // 
+            // labelThresholdIndexedPercent
+            // 
+            this.labelThresholdIndexedPercent.AutoSize = true;
+            this.labelThresholdIndexedPercent.Location = new System.Drawing.Point(182, 107);
+            this.labelThresholdIndexedPercent.Name = "labelThresholdIndexedPercent";
+            this.labelThresholdIndexedPercent.Size = new System.Drawing.Size(15, 13);
+            this.labelThresholdIndexedPercent.TabIndex = 6;
+            this.labelThresholdIndexedPercent.Text = "%";
             // 
             // FormImagePalette
             // 
@@ -248,9 +280,10 @@
             this.Load += new System.EventHandler(this.FormImagePalette_Load);
             this.groupBoxReference.ResumeLayout(false);
             this.groupBoxReference.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdMatched)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDistance)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCoverage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -266,14 +299,17 @@
         private System.Windows.Forms.TextBox textBoxFileNameReference;
         private System.Windows.Forms.CheckBox checkBoxIncludeReference;
         private System.Windows.Forms.GroupBox groupBoxReference;
-        private System.Windows.Forms.Label labelColorDistance;
+        private System.Windows.Forms.Label labelDistance;
         private System.Windows.Forms.NumericUpDown numericUpDownDistance;
-        private System.Windows.Forms.Label labelColorThresholdPercent;
-        private System.Windows.Forms.NumericUpDown numericUpDownThreshold;
-        private System.Windows.Forms.Label labelColorThreshold;
+        private System.Windows.Forms.Label labelThresholdMatchedPercent;
+        private System.Windows.Forms.NumericUpDown numericUpDownThresholdMatched;
+        private System.Windows.Forms.Label labelThresholdMatched;
         private System.Windows.Forms.Label labelCoverage;
         private System.Windows.Forms.NumericUpDown numericUpDownCoverage;
         private System.Windows.Forms.Label labelCoveragePercentage;
+        private System.Windows.Forms.Label labelThresholdIndexed;
+        private System.Windows.Forms.Label labelThresholdIndexedPercent;
+        private System.Windows.Forms.NumericUpDown numericUpDownThresholdIndexed;
     }
 }
 

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,15 +16,68 @@ namespace ImagePalette
     /// </summary>
     public class ImagePaletteProcess
     {
+        private const string DataTableIndexedName = "Indexed from image";
+        private const string DataTableLoadedName = "Loaded as reference";
+        private const string DataTableMatchedName = "Matched colors";
+
         public ImagePaletteParameters Parameters { get; private set; }
+
         public DataTable DataTableIndexed { get; private set; }
         public DataTable DataTableLoaded { get; private set; }
+        public DataTable DataTableMatched { get; private set; }
+
+        public List<string> FileNames { get; private set; }
+        private int currentFileIndex;
+        private bool currentImageIsProcessed;
+
+        public Image CurrentImageOriginal { get; private set; }
+        public Image CurrentImageIndexed { get; private set; }
+
+        // Events raised in this class
+        public delegate void ImageChanged(Image image);
+        public event ImageChanged imageChangedEvent = null;
 
         public ImagePaletteProcess(ImagePaletteParameters parameters)
         {
             Parameters = parameters;
-            DataTableIndexed = null;
-            DataTableLoaded = null;
+
+            // Get the files to process
+            FileNames = new List<string>();
+            GetFileNames();
+
+            // Indexed from image
+            DataTableIndexed = new DataTable(DataTableIndexedName);
+            DataTableIndexed.Columns.AddRange(new DataColumn[] {
+                new DataColumn(PaletteGridColumns.Color, typeof(string)),
+                new DataColumn(PaletteGridColumns.R, typeof(int)),
+                new DataColumn(PaletteGridColumns.G, typeof(int)),
+                new DataColumn(PaletteGridColumns.B, typeof(int)),
+                new DataColumn(PaletteGridColumns.A, typeof(int)),
+                new DataColumn(PaletteGridColumns.Count, typeof(int)),
+                new DataColumn(PaletteGridColumns.Percentage, typeof(int))
+            });
+
+            // Matched colors from image + palette
+            DataTableMatched = new DataTable(DataTableMatchedName);
+            DataTableMatched.Columns.AddRange(new DataColumn[] {
+                new DataColumn(PaletteGridColumns.Color, typeof(string)),
+                new DataColumn(PaletteGridColumns.R, typeof(int)),
+                new DataColumn(PaletteGridColumns.G, typeof(int)),
+                new DataColumn(PaletteGridColumns.B, typeof(int)),
+                new DataColumn(PaletteGridColumns.A, typeof(int)),
+                new DataColumn(PaletteGridColumns.Count, typeof(int)),
+                new DataColumn(PaletteGridColumns.Percentage, typeof(int))
+            });
+
+            // Loaded palette
+            DataTableLoaded = new DataTable(DataTableLoadedName);
+            DataTableLoaded.Columns.AddRange(new DataColumn[] {
+                new DataColumn(PaletteGridColumns.Color, typeof(string)),
+                new DataColumn(PaletteGridColumns.R, typeof(int)),
+                new DataColumn(PaletteGridColumns.G, typeof(int)),
+                new DataColumn(PaletteGridColumns.B, typeof(int)),
+                new DataColumn(PaletteGridColumns.A, typeof(int))
+            });
         }
 
         /// <summary>
@@ -124,18 +180,167 @@ namespace ImagePalette
         }
 
         /// <summary>
-        /// Gets the table with the indexed colors that pass the given threshold of number of colors from the indexed image.
+        /// Gets the file(s) from the Parameters and populates the necessary lists.
         /// </summary>
-        /// <param name="dtIndexed"></param>
-        /// <returns></returns>
-        public DataTable GetIndexedThreshold(DataTable dtIndexed)
+        private void GetFileNames()
         {
-            return null;
+            FileNames.Clear();
+            currentFileIndex = 0;
+            currentImageIsProcessed = false;
+
+            if (!string.IsNullOrWhiteSpace(Parameters.FileName))
+            {
+                FileAttributes attr = File.GetAttributes(Parameters.FileName);
+                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    // Directory
+                    FileNames.AddRange(Directory.GetFiles(Parameters.FileName));
+                }
+                else if ((attr & FileAttributes.Normal) == FileAttributes.Normal)
+                {
+                    // File
+                    FileNames.Add(Parameters.FileName);
+                }
+                // else it's neither a file nor a directory, doesn't exist
+            }
         }
 
-        public DataTable GetMatchedByDistance(DataTable dtIndexed, DataTable dtLoaded)
+        public string CurrentFileName
         {
-            return null;
+            get
+            {
+                if (FileNames == null || FileNames.Count == 0)
+                    return null;
+                return FileNames[currentFileIndex];
+            }
+        }
+
+        /// <summary>
+        /// Loads the palette from the file specified in the parameters.
+        /// </summary>
+        private void LoadPalette()
+        {
+            DataTableLoaded.Rows.Clear();
+
+            if (!string.IsNullOrWhiteSpace(Parameters.FileNameReference))
+            {
+                HashSet<Color> palette = new PaletteReader(Parameters.FileNameReference).GetPalette();
+                if (palette != null && palette.Count > 0)
+                {
+                    foreach (Color color in palette)
+                    {
+                        DataRow row = DataTableLoaded.NewRow();
+                        row[PaletteGridColumns.R] = color.R;
+                        row[PaletteGridColumns.G] = color.G;
+                        row[PaletteGridColumns.B] = color.B;
+                        row[PaletteGridColumns.A] = color.A;
+
+                        DataTableLoaded.Rows.Add(row);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="forceReprocess"></param>
+        public void ProcessCurrentImage(bool forceReprocess=false)
+        {
+            if (forceReprocess || !currentImageIsProcessed)
+            {
+                if (DataTableLoaded == null || DataTableLoaded.Rows.Count == 0)
+                {
+                    LoadPalette();
+                }
+
+                GetIndexedTable(false, forceReprocess);
+                GetMatchedTable(false, forceReprocess);
+
+                currentImageIsProcessed = true;
+            }
+        }
+
+        /// <summary>
+        /// Gets the table with the indexed colors that pass the given threshold of number of colors from the indexed image.
+        /// </summary>
+        /// <param name="applyThreshold"></param>
+        /// <param name="forceReprocess"></param>
+        /// <returns></returns>
+        public DataTable GetIndexedTable(bool applyThreshold, bool forceReprocess = false)
+        {
+            if (forceReprocess || !currentImageIsProcessed)
+            {
+                if (DataTableIndexed == null || DataTableIndexed.Rows.Count == 0 || DataTableLoaded == null || DataTableLoaded.Rows.Count == 0)
+                    throw new Exception("Need to have both the indexed and loaded colors to match by distance.");
+
+                // Load image
+                CurrentImageOriginal = new Bitmap(CurrentFileName);
+                if (CurrentImageOriginal == null)
+                    throw new Exception("Error reading image.");
+
+                // Convert to indexed image
+                MemoryStream bitStream = new MemoryStream();
+                CurrentImageOriginal.Save(bitStream, ImageFormat.Gif);
+                CurrentImageIndexed = new Bitmap(bitStream);
+                if (CurrentImageIndexed == null)
+                    throw new Exception("Error converting to indexed image.");
+
+                // Index colors from image
+                // Hashtable has faster operation than DataTable
+                Bitmap image = (Bitmap)CurrentImageIndexed;
+                Hashtable indexedFromImage = new Hashtable();
+                int totalPixels = 0;
+
+                for (int x = 0; x < image.Width; x++)
+                {
+                    for (int y = 0; y < image.Height; y++)
+                    {
+                        Color color = image.GetPixel(x, y);
+                        if (indexedFromImage[color] == null)
+                            indexedFromImage[color] = 1;
+                        else
+                            indexedFromImage[color] = (int)indexedFromImage[color] + 1;
+
+                        totalPixels++;
+                    }
+                }
+
+                // Convert Hashtable to DataTable
+                DataTableIndexed.Rows.Clear();
+                foreach (DictionaryEntry entry in indexedFromImage)
+                {
+                    Color color = (Color)entry.Key;
+                    int count = (int)entry.Value;
+
+                    DataRow row = DataTableIndexed.NewRow();
+                    row[PaletteGridColumns.R] = color.R;
+                    row[PaletteGridColumns.G] = color.G;
+                    row[PaletteGridColumns.B] = color.B;
+                    row[PaletteGridColumns.A] = color.A;
+                    row[PaletteGridColumns.Count] = count;
+                    row[PaletteGridColumns.Percentage] = (int)((count * 100) / totalPixels);
+
+                    DataTableIndexed.Rows.Add(row);
+                }
+
+                DataTableIndexed.DefaultView.Sort = PaletteGridColumns.Count + " DESC";
+            }
+
+            DataTableIndexed.DefaultView.RowFilter = applyThreshold ? string.Format("{0} >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdIndexed) : null;
+
+            return DataTableIndexed;
+        }
+
+        public DataTable GetMatchedTable(bool applyThreshold, bool forceReprocess = false)
+        {
+            if (forceReprocess || !currentImageIsProcessed)
+            {
+
+                DataTableMatched.DefaultView.RowFilter = applyThreshold ? string.Format("{0} >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdMatched) : null;
+            }
+
+            return DataTableMatched;
         }
     }
 }
