@@ -86,11 +86,25 @@ namespace ImagePalette
             if (e.ListChangedType == ListChangedType.Reset && dataGridView.Columns.Contains(PaletteGridColumns.Color))
             {
                 DataGridView dgv = (DataGridView)sender;
-                for (int i = dgv.Rows.Count - 1; i >= 0; i--)
+                bool hasMatchColumn = dgv.Columns.Contains(PaletteGridColumns.Match);
+
+                foreach (DataGridViewRow row in dgv.Rows)
                 {
-                    DataGridViewRow row = dgv.Rows[i];
-                    Color color = GetColorInRow(row);
-                    dgv.Rows[i].Cells[PaletteGridColumns.Color].Style.BackColor = color;
+                    DataGridViewCell cellColor = row.Cells[PaletteGridColumns.Color];
+                    Color color = (Color)cellColor.Value;
+                    cellColor.Style.BackColor = color;
+                    cellColor.Style.ForeColor = color;
+
+                    if (hasMatchColumn)
+                    {
+                        DataGridViewCell cellMatch = row.Cells[PaletteGridColumns.Match];
+                        if (cellMatch.Value != null && !(cellMatch.Value is DBNull))
+                        {
+                            Color match = (Color)cellMatch.Value;
+                            cellMatch.Style.BackColor = match;
+                            cellMatch.Style.ForeColor = match;
+                        }
+                    }
                 }
             }
         }
@@ -102,17 +116,13 @@ namespace ImagePalette
 
         public Color GetColorInRow(DataGridViewRow row)
         {
-            return Color.FromArgb(
-                (int)row.Cells[PaletteGridColumns.A].Value,
-                (int)row.Cells[PaletteGridColumns.R].Value,
-                (int)row.Cells[PaletteGridColumns.G].Value,
-                (int)row.Cells[PaletteGridColumns.B].Value);
+            return (Color)row.Cells[PaletteGridColumns.Color].Value;
         }
 
         public List<Color> GetAllColors()
         {
-            List<Color> colors = new List<Color>();
-            
+            List<Color> colors = new List<Color>(DataGridView.Rows.Count);
+
             foreach(DataGridViewRow row in DataGridView.Rows)
                 colors.Add(GetColorInRow(row));
 

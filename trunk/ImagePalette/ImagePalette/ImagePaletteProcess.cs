@@ -54,21 +54,21 @@ namespace ImagePalette
             // Indexed from image
             DataTableIndexed = new DataTable(DataTableIndexedName);
             DataTableIndexed.Columns.AddRange(new DataColumn[] {
-                new DataColumn(PaletteGridColumns.Color, typeof(string)),
+                new DataColumn(PaletteGridColumns.Color, typeof(Color)),
                 new DataColumn(PaletteGridColumns.R, typeof(int)),
                 new DataColumn(PaletteGridColumns.G, typeof(int)),
                 new DataColumn(PaletteGridColumns.B, typeof(int)),
                 new DataColumn(PaletteGridColumns.A, typeof(int)),
                 new DataColumn(PaletteGridColumns.Count, typeof(int)),
                 new DataColumn(PaletteGridColumns.Percentage, typeof(double)),
-                new DataColumn(PaletteGridColumns.Match, typeof(string)),
+                new DataColumn(PaletteGridColumns.Match, typeof(Color)),
                 new DataColumn(PaletteGridColumns.Distance, typeof(double))
             });
 
             // Matched colors from image + palette
             DataTableMatched = new DataTable(DataTableMatchedName);
             DataTableMatched.Columns.AddRange(new DataColumn[] {
-                new DataColumn(PaletteGridColumns.Color, typeof(string)),
+                new DataColumn(PaletteGridColumns.Color, typeof(Color)),
                 new DataColumn(PaletteGridColumns.R, typeof(int)),
                 new DataColumn(PaletteGridColumns.G, typeof(int)),
                 new DataColumn(PaletteGridColumns.B, typeof(int)),
@@ -80,7 +80,7 @@ namespace ImagePalette
             // Loaded palette
             DataTableLoaded = new DataTable(DataTableLoadedName);
             DataTableLoaded.Columns.AddRange(new DataColumn[] {
-                new DataColumn(PaletteGridColumns.Color, typeof(string)),
+                new DataColumn(PaletteGridColumns.Color, typeof(Color)),
                 new DataColumn(PaletteGridColumns.R, typeof(int)),
                 new DataColumn(PaletteGridColumns.G, typeof(int)),
                 new DataColumn(PaletteGridColumns.B, typeof(int)),
@@ -257,6 +257,7 @@ namespace ImagePalette
                     foreach (Color color in palette)
                     {
                         DataRow row = DataTableLoaded.NewRow();
+                        row[PaletteGridColumns.Color] = color;
                         row[PaletteGridColumns.R] = color.R;
                         row[PaletteGridColumns.G] = color.G;
                         row[PaletteGridColumns.B] = color.B;
@@ -275,13 +276,7 @@ namespace ImagePalette
 
             HashSet<Color> palette = new HashSet<Color>();
             foreach (DataRow row in DataTableLoaded.Rows)
-            {
-                palette.Add(Color.FromArgb(
-                    (int)row[PaletteGridColumns.A],
-                    (int)row[PaletteGridColumns.R],
-                    (int)row[PaletteGridColumns.G],
-                    (int)row[PaletteGridColumns.B]));
-            }
+                palette.Add((Color)row[PaletteGridColumns.Color]);
 
             return palette;
         }
@@ -361,7 +356,7 @@ namespace ImagePalette
                     if (CurrentImageOriginal == null)
                         throw new Exception("Error reading image.");
 
-                    // Convert to indexed image
+                    // Convert to indexed image to limit the number of colors being processed
                     MemoryStream bitStream = new MemoryStream();
                     CurrentImageOriginal.Save(bitStream, ImageFormat.Gif);
                     CurrentImageIndexed = new Bitmap(bitStream);
@@ -403,6 +398,7 @@ namespace ImagePalette
                     int count = (int)entry.Value;
 
                     DataRow row = DataTableIndexed.NewRow();
+                    row[PaletteGridColumns.Color] = color;
                     row[PaletteGridColumns.R] = color.R;
                     row[PaletteGridColumns.G] = color.G;
                     row[PaletteGridColumns.B] = color.B;
@@ -436,29 +432,33 @@ namespace ImagePalette
                 DataTableMatched.Rows.Clear();
                 foreach (DataRow rowIndexed in dtIndexed.Rows)
                 {
-                    Color colorIndexed = Color.FromArgb(
-                        (int)rowIndexed[PaletteGridColumns.A],
-                        (int)rowIndexed[PaletteGridColumns.R],
-                        (int)rowIndexed[PaletteGridColumns.G],
-                        (int)rowIndexed[PaletteGridColumns.B]);
+                    Color colorIndexed = (Color)rowIndexed[PaletteGridColumns.Color];
 
+                    Color colorMatched = Color.White;  // Just a color to initialize given Color is non-nullable
+                    double distanceClosest = -1;
                     foreach (Color colorPalette in palette)
                     {
                         double distance = ColorDistance(colorIndexed, colorPalette);
                         if (IsWithinDistance(distance))
                         {
-                            rowIndexed[PaletteGridColumns.Distance] = distance;
-                            DataRow row = DataTableMatched.NewRow();
-                            //row[PaletteGridColumns.A]
-
-                            //DataTableMatched.Rows.Add(row);
-
                             // Each color can potentially be matched to more than one color in the palette
-                            // The break below prevents that from happening
-                            // Easier to implement (no need to track multiple matches per color), especially in the UI
-                            // Slightly faster also
-                            break;
+                            // Keeps only the closest color
+                            if (distanceClosest < 0 || distance < distanceClosest)
+                            {
+                                colorMatched = colorPalette;
+                                distanceClosest = distance;
+                            }
                         }
+                    }
+
+                    if (distanceClosest > -1)
+                    {
+                        rowIndexed[PaletteGridColumns.Match] = colorMatched;
+                        rowIndexed[PaletteGridColumns.Distance] = distanceClosest;
+                        DataRow row = DataTableMatched.NewRow();
+                        //row[PaletteGridColumns.A]
+
+                        //DataTableMatched.Rows.Add(row);
                     }
                 }
 
