@@ -31,8 +31,8 @@ namespace ImagePalette
         public DataTable DataTableMatched { get; private set; }
 
         public List<string> FileNames { get; private set; }
-        private int currentFileIndex;
-        private bool currentImageIsProcessed;
+        public int CurrentFileIndex { get; private set; }
+        public bool CurrentImageIsProcessed { get; private set; }
 
         public Image CurrentImageOriginal { get; private set; }
         public Image CurrentImageIndexed { get; private set; }
@@ -60,7 +60,9 @@ namespace ImagePalette
                 new DataColumn(PaletteGridColumns.B, typeof(int)),
                 new DataColumn(PaletteGridColumns.A, typeof(int)),
                 new DataColumn(PaletteGridColumns.Count, typeof(int)),
-                new DataColumn(PaletteGridColumns.Percentage, typeof(int))
+                new DataColumn(PaletteGridColumns.Percentage, typeof(double)),
+                new DataColumn(PaletteGridColumns.Match, typeof(string)),
+                new DataColumn(PaletteGridColumns.Distance, typeof(double))
             });
 
             // Matched colors from image + palette
@@ -72,7 +74,7 @@ namespace ImagePalette
                 new DataColumn(PaletteGridColumns.B, typeof(int)),
                 new DataColumn(PaletteGridColumns.A, typeof(int)),
                 new DataColumn(PaletteGridColumns.Count, typeof(int)),
-                new DataColumn(PaletteGridColumns.Percentage, typeof(int))
+                new DataColumn(PaletteGridColumns.Percentage, typeof(double))
             });
 
             // Loaded palette
@@ -196,8 +198,13 @@ namespace ImagePalette
 
         public bool IsWithinDistance(Color c1, Color c2)
         {
-            double dist = ColorDistance(c1, c2);
-            return dist <= Parameters.Distance;
+            double distance = ColorDistance(c1, c2);
+            return IsWithinDistance(distance);
+        }
+
+        public bool IsWithinDistance(double distance)
+        {
+            return distance <= Parameters.Distance;
         }
 
         /// <summary>
@@ -206,8 +213,8 @@ namespace ImagePalette
         private void GetFileNames()
         {
             FileNames.Clear();
-            currentFileIndex = 0;
-            currentImageIsProcessed = false;
+            CurrentFileIndex = 0;
+            CurrentImageIsProcessed = false;
 
             if (!string.IsNullOrWhiteSpace(Parameters.FileName))
             {
@@ -231,7 +238,7 @@ namespace ImagePalette
             {
                 if (FileNames == null || FileNames.Count == 0)
                     return null;
-                return FileNames[currentFileIndex];
+                return FileNames[CurrentFileIndex];
             }
         }
 
@@ -261,13 +268,34 @@ namespace ImagePalette
             }
         }
 
+        public HashSet<Color> GetPalette()
+        {
+            if (DataTableLoaded.Rows.Count == 0)
+                LoadPalette();
+
+            HashSet<Color> palette = new HashSet<Color>();
+            foreach (DataRow row in DataTableLoaded.Rows)
+            {
+                palette.Add(Color.FromArgb(
+                    (int)row[PaletteGridColumns.A],
+                    (int)row[PaletteGridColumns.R],
+                    (int)row[PaletteGridColumns.G],
+                    (int)row[PaletteGridColumns.B]));
+            }
+
+            return palette;
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="forceReprocess"></param>
-        public void ProcessCurrentImage(bool forceReprocess=false)
+        /// <returns></returns>
+        public bool ProcessCurrent(bool forceReprocess=false)
         {
-            if (forceReprocess || !currentImageIsProcessed)
+            bool processed = false;
+
+            if (forceReprocess || !CurrentImageIsProcessed)
             {
                 if (DataTableLoaded == null || DataTableLoaded.Rows.Count == 0)
                 {
@@ -277,8 +305,43 @@ namespace ImagePalette
                 GetIndexedTable(false, forceReprocess);
                 GetMatchedTable(false, forceReprocess);
 
-                currentImageIsProcessed = true;
+                CurrentImageIsProcessed = true;
+                processed = true;
             }
+
+            return processed;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public bool ProcessNext()
+        {
+            bool processed = false;
+
+            if (CurrentFileIndex < (FileNames.Count - 1))
+            {
+                CurrentFileIndex++;
+                CurrentImageIsProcessed = false;
+                processed = ProcessCurrent();
+            }
+
+            return processed;
+        }
+
+        public bool ProcessPrevious()
+        {
+            bool processed = false;
+
+            if (CurrentFileIndex > 0)
+            {
+                CurrentFileIndex--;
+                CurrentImageIsProcessed = false;
+                processed = ProcessCurrent();
+            }
+
+            return processed;
         }
 
         /// <summary>
@@ -289,7 +352,7 @@ namespace ImagePalette
         /// <returns></returns>
         public DataTable GetIndexedTable(bool applyThreshold, bool forceReprocess = false)
         {
-            if (forceReprocess || !currentImageIsProcessed)
+            if (forceReprocess || !CurrentImageIsProcessed)
             {
                 try
                 {
@@ -345,7 +408,7 @@ namespace ImagePalette
                     row[PaletteGridColumns.B] = color.B;
                     row[PaletteGridColumns.A] = color.A;
                     row[PaletteGridColumns.Count] = count;
-                    row[PaletteGridColumns.Percentage] = (int)((count * 100) / totalPixels);
+                    row[PaletteGridColumns.Percentage] = (double)(count * 100) / (double)totalPixels;
 
                     DataTableIndexed.Rows.Add(row);
                 }
@@ -360,10 +423,44 @@ namespace ImagePalette
 
         public DataTable GetMatchedTable(bool applyThreshold, bool forceReprocess = false)
         {
-            if (forceReprocess || !currentImageIsProcessed)
+            if (forceReprocess || !CurrentImageIsProcessed)
             {
                 if (DataTableIndexed == null || DataTableIndexed.Rows.Count == 0 || DataTableLoaded == null || DataTableLoaded.Rows.Count == 0)
                     throw new Exception("Need to have both the indexed and loaded colors to match by distance.");
+
+                // Apply index threshold if necessary
+                // The threshold is already applied to the default view of the DataTableIndexed
+                DataTable dtIndexed = Parameters.ApplyThresholdIndexed ? DataTableIndexed.DefaultView.ToTable() : DataTableIndexed;
+
+                HashSet<Color> palette = GetPalette();
+                DataTableMatched.Rows.Clear();
+                foreach (DataRow rowIndexed in dtIndexed.Rows)
+                {
+                    Color colorIndexed = Color.FromArgb(
+                        (int)rowIndexed[PaletteGridColumns.A],
+                        (int)rowIndexed[PaletteGridColumns.R],
+                        (int)rowIndexed[PaletteGridColumns.G],
+                        (int)rowIndexed[PaletteGridColumns.B]);
+
+                    foreach (Color colorPalette in palette)
+                    {
+                        double distance = ColorDistance(colorIndexed, colorPalette);
+                        if (IsWithinDistance(distance))
+                        {
+                            rowIndexed[PaletteGridColumns.Distance] = distance;
+                            DataRow row = DataTableMatched.NewRow();
+                            //row[PaletteGridColumns.A]
+
+                            //DataTableMatched.Rows.Add(row);
+
+                            // Each color can potentially be matched to more than one color in the palette
+                            // The break below prevents that from happening
+                            // Easier to implement (no need to track multiple matches per color), especially in the UI
+                            // Slightly faster also
+                            break;
+                        }
+                    }
+                }
 
 
                 DataTableMatched.DefaultView.RowFilter = applyThreshold ? string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdMatched) : null;

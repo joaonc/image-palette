@@ -18,6 +18,8 @@ namespace ImagePalette
         public static string Color = "Color";
         public static string Count = "Count";
         public static string Percentage = "%";
+        public static string Match = "Match";
+        public static string Distance = "Dist";
 
         /// <summary>
         /// Gets all the column names defined in this class.

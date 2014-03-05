@@ -32,6 +32,7 @@ namespace ImagePalette
 
             PaletteProcessor.ImageChangedEvent += new ImageChangedHandler(paletteProcessor_OnImageChanged);
             SetBindings();
+            UpdateUIPreviousNextButtons();
             ProcessImage();
         }
 
@@ -61,6 +62,10 @@ namespace ImagePalette
                 checkBoxApplyThresholdIndexed.DataBindings.Add("Checked", PaletteProcessor.Parameters, 
                     Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdIndexed).Name);
 
+                checkBoxApplyThresholdMatched.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+                checkBoxApplyThresholdMatched.DataBindings.Add("Checked", PaletteProcessor.Parameters,
+                    Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdMatched).Name);
+
                 paletteGridIndexed.DataGridView.DataSource = PaletteProcessor.DataTableIndexed.DefaultView;
                 paletteGridLoaded.DataGridView.DataSource = PaletteProcessor.DataTableLoaded.DefaultView;
                 paletteGridMatched.DataGridView.DataSource = PaletteProcessor.DataTableMatched.DefaultView;
@@ -75,7 +80,7 @@ namespace ImagePalette
         {
             try
             {
-                PaletteProcessor.ProcessCurrentImage();
+                PaletteProcessor.ProcessCurrent();
             }
             catch (Exception ex)
             {
@@ -137,12 +142,20 @@ namespace ImagePalette
 
         private void buttonPrevious_Click(object sender, EventArgs e)
         {
-
+            PaletteProcessor.ProcessPrevious();
+            UpdateUIPreviousNextButtons();
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
+            PaletteProcessor.ProcessNext();
+            UpdateUIPreviousNextButtons();
+        }
 
+        private void UpdateUIPreviousNextButtons()
+        {
+            buttonNext.Enabled = PaletteProcessor.CurrentFileIndex < (PaletteProcessor.FileNames.Count -1);
+            buttonPrevious.Enabled = PaletteProcessor.CurrentFileIndex > 0;
         }
 
         private void panelSpectrum_Paint(object sender, PaintEventArgs e)

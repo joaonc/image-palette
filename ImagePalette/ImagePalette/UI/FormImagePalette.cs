@@ -26,7 +26,7 @@ namespace ImagePalette
             parameters.FileName = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\CCMG707.jpg";
             parameters.FileNameReference = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\colors.pal";
             parameters.Coverage = 100;
-            parameters.Distance = 20;
+            parameters.Distance = 1000;
             parameters.ThresholdMatched = 10;
             parameters.ThresholdIndexed = 10;
 
