@@ -40,12 +40,8 @@
             this.buttonOk = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.checkBoxApplyThresholdIndexed = new System.Windows.Forms.CheckBox();
-            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.paletteGridMatched = new ImagePalette.PaletteGrid();
-            this.paletteGridThreshold = new ImagePalette.PaletteGrid();
             this.labelThresholdApplied = new System.Windows.Forms.Label();
             this.buttonPrevious = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
@@ -56,6 +52,10 @@
             this.labelThresholdMatched = new System.Windows.Forms.Label();
             this.numericUpDownThresholdMatched = new System.Windows.Forms.NumericUpDown();
             this.labelThresholdMatchedPercent = new System.Windows.Forms.Label();
+            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
+            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
+            this.paletteGridMatched = new ImagePalette.PaletteGrid();
+            this.paletteGridThreshold = new ImagePalette.PaletteGrid();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIndexed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDistance)).BeginInit();
@@ -201,16 +201,6 @@
             this.checkBoxApplyThresholdIndexed.Text = "Apply Threshold";
             this.checkBoxApplyThresholdIndexed.UseVisualStyleBackColor = true;
             // 
-            // paletteGridIndexed
-            // 
-            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
-            this.paletteGridIndexed.Name = "paletteGridIndexed";
-            this.paletteGridIndexed.Size = new System.Drawing.Size(248, 344);
-            this.paletteGridIndexed.TabIndex = 1;
-            // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -228,16 +218,6 @@
             this.splitContainer2.Size = new System.Drawing.Size(585, 363);
             this.splitContainer2.SplitterDistance = 183;
             this.splitContainer2.TabIndex = 14;
-            // 
-            // paletteGridLoaded
-            // 
-            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridLoaded.Name = "paletteGridLoaded";
-            this.paletteGridLoaded.Size = new System.Drawing.Size(177, 343);
-            this.paletteGridLoaded.TabIndex = 1;
             // 
             // splitContainer3
             // 
@@ -257,26 +237,6 @@
             this.splitContainer3.Size = new System.Drawing.Size(398, 363);
             this.splitContainer3.SplitterDistance = 212;
             this.splitContainer3.TabIndex = 10;
-            // 
-            // paletteGridMatched
-            // 
-            this.paletteGridMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridMatched.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridMatched.Name = "paletteGridMatched";
-            this.paletteGridMatched.Size = new System.Drawing.Size(206, 343);
-            this.paletteGridMatched.TabIndex = 1;
-            // 
-            // paletteGridThreshold
-            // 
-            this.paletteGridThreshold.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridThreshold.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridThreshold.Name = "paletteGridThreshold";
-            this.paletteGridThreshold.Size = new System.Drawing.Size(176, 343);
-            this.paletteGridThreshold.TabIndex = 1;
             // 
             // labelThresholdApplied
             // 
@@ -375,6 +335,46 @@
             this.labelThresholdMatchedPercent.TabIndex = 9;
             this.labelThresholdMatchedPercent.Text = "%";
             // 
+            // paletteGridIndexed
+            // 
+            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
+            this.paletteGridIndexed.Name = "paletteGridIndexed";
+            this.paletteGridIndexed.Size = new System.Drawing.Size(248, 344);
+            this.paletteGridIndexed.TabIndex = 1;
+            // 
+            // paletteGridLoaded
+            // 
+            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridLoaded.Name = "paletteGridLoaded";
+            this.paletteGridLoaded.Size = new System.Drawing.Size(177, 343);
+            this.paletteGridLoaded.TabIndex = 1;
+            // 
+            // paletteGridMatched
+            // 
+            this.paletteGridMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridMatched.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridMatched.Name = "paletteGridMatched";
+            this.paletteGridMatched.Size = new System.Drawing.Size(206, 343);
+            this.paletteGridMatched.TabIndex = 1;
+            // 
+            // paletteGridThreshold
+            // 
+            this.paletteGridThreshold.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridThreshold.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridThreshold.Name = "paletteGridThreshold";
+            this.paletteGridThreshold.Size = new System.Drawing.Size(176, 343);
+            this.paletteGridThreshold.TabIndex = 1;
+            // 
             // FormImagePaletteProcess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -401,6 +401,7 @@
             this.Name = "FormImagePaletteProcess";
             this.ShowInTaskbar = false;
             this.Text = "Image Palette";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormImagePaletteProcess_FormClosing);
             this.Load += new System.EventHandler(this.FormImageOriginal_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginal)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIndexed)).EndInit();

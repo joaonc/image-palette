@@ -16,6 +16,9 @@ namespace ImagePalette
     {
         public ImagePaletteProcess PaletteProcessor { get; private set; }
 
+        private FormImage formImageOriginal;
+        private FormImage formImageIndexed;
+
         public FormImagePaletteProcess(ImagePaletteParameters parameters)
         {
             InitializeComponent();
@@ -24,8 +27,12 @@ namespace ImagePalette
 
         private void FormImageOriginal_Load(object sender, EventArgs e)
         {
+            formImageOriginal = new FormImage("Original");
+            formImageIndexed = new FormImage("Indexed");
+
+            PaletteProcessor.ImageChangedEvent += new ImageChangedHandler(paletteProcessor_OnImageChanged);
             SetBindings();
-            PaletteProcessor.ProcessCurrentImage();
+            ProcessImage();
         }
 
         ImagePaletteParameters Parameters
@@ -38,18 +45,53 @@ namespace ImagePalette
             // Set bindings between the UI and variables
             try
             {
-                numericUpDownDistance.DataBindings.Add("Value", PaletteProcessor.Parameters, "Distance");
-                numericUpDownThresholdIndexed.DataBindings.Add("Value", PaletteProcessor.Parameters, "ThresholdIndexed");
-                numericUpDownThresholdMatched.DataBindings.Add("Value", PaletteProcessor.Parameters, "ThresholdMatched");
+                numericUpDownDistance.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+                numericUpDownDistance.DataBindings.Add("Value", PaletteProcessor.Parameters,
+                    Util.GetMemberInfo((ImagePaletteParameters s) => s.Distance).Name);
+
+                numericUpDownThresholdIndexed.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+                numericUpDownThresholdIndexed.DataBindings.Add("Value", PaletteProcessor.Parameters,
+                    Util.GetMemberInfo((ImagePaletteParameters s) => s.ThresholdIndexed).Name);
+
+                numericUpDownThresholdMatched.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+                numericUpDownThresholdMatched.DataBindings.Add("Value", PaletteProcessor.Parameters,
+                    Util.GetMemberInfo((ImagePaletteParameters s) => s.ThresholdMatched).Name);
+                
+                checkBoxApplyThresholdIndexed.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+                checkBoxApplyThresholdIndexed.DataBindings.Add("Checked", PaletteProcessor.Parameters, 
+                    Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdIndexed).Name);
+
                 paletteGridIndexed.DataGridView.DataSource = PaletteProcessor.DataTableIndexed.DefaultView;
                 paletteGridLoaded.DataGridView.DataSource = PaletteProcessor.DataTableLoaded.DefaultView;
                 paletteGridMatched.DataGridView.DataSource = PaletteProcessor.DataTableMatched.DefaultView;
-                pictureBoxOriginal.Image = PaletteProcessor.CurrentImageOriginal;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error setting bindings");
             }
+        }
+
+        private void ProcessImage()
+        {
+            try
+            {
+                PaletteProcessor.ProcessCurrentImage();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error processing image");
+            }
+        }
+
+        private void paletteProcessor_OnImageChanged(object sender)
+        {
+            System.Diagnostics.Debug.Assert(object.ReferenceEquals(sender, PaletteProcessor));
+
+            pictureBoxOriginal.Image = PaletteProcessor.CurrentImageOriginal;
+            pictureBoxIndexed.Image = PaletteProcessor.CurrentImageIndexed;
+
+            formImageOriginal.Image = PaletteProcessor.CurrentImageOriginal;
+            formImageIndexed.Image = PaletteProcessor.CurrentImageIndexed;
         }
 
         private void buttonOk_Click(object sender, EventArgs e)
@@ -59,20 +101,38 @@ namespace ImagePalette
 
         private void pictureBoxOriginal_Click(object sender, EventArgs e)
         {
-            if (pictureBoxOriginal.Image != null)
+            if (formImageOriginal == null || formImageOriginal.IsDisposed)
             {
-                FormImage formImage = new FormImage("Original", pictureBoxOriginal.Image);
-                formImage.Show();
+                formImageOriginal = new FormImage("Original");
+                formImageOriginal.Image = PaletteProcessor.CurrentImageOriginal;
             }
+
+            if (!formImageOriginal.Visible)
+                formImageOriginal.Show();
+            else
+                formImageOriginal.BringToFront();
         }
 
         private void pictureBoxIndexed_Click(object sender, EventArgs e)
         {
-            if (pictureBoxIndexed.Image != null)
+            if (formImageIndexed == null || formImageIndexed.IsDisposed)
             {
-                FormImage formImage = new FormImage("Indexed", pictureBoxIndexed.Image);
-                formImage.Show();
+                formImageIndexed = new FormImage("Indexed");
+                formImageIndexed.Image = PaletteProcessor.CurrentImageIndexed;
             }
+
+            if (!formImageIndexed.Visible)
+                formImageIndexed.Show();
+            else
+                formImageIndexed.BringToFront();
+        }
+
+        private void FormImagePaletteProcess_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (formImageOriginal.Visible)
+                formImageOriginal.Close();
+            if (formImageIndexed.Visible)
+                formImageIndexed.Close();
         }
 
         private void buttonPrevious_Click(object sender, EventArgs e)

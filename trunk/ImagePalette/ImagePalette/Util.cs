@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -78,5 +80,29 @@ namespace ImagePalette
             return System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
         }
 
+        /// <summary>
+        /// Get the MemberInfo with strong typing.
+        /// 
+        /// Usage:
+        /// class SomeClass {
+        ///   public string SomeProperty { get; set; }
+        /// }
+        /// MemberInfo member = GetMemberInfo((SomeClass s) => s.SomeProperty);
+        /// Console.WriteLine(member.Name); // prints "SomeProperty" on the console
+        /// </summary>
+        /// <typeparam name="TObject"></typeparam>
+        /// <typeparam name="TProperty"></typeparam>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        public static MemberInfo GetMemberInfo<TObject, TProperty>(Expression<Func<TObject, TProperty>> expression)
+        {
+            var member = expression.Body as MemberExpression;
+            if (member != null)
+            {
+                return member.Member;
+            }
+
+            throw new ArgumentException("expression");
+        }
     }
 }
