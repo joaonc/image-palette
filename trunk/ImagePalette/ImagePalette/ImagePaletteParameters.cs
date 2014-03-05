@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace ImagePalette
 {
+    /// <summary>
+    /// Application parameters.
+    /// XML serializable.
+    /// </summary>
     public class ImagePaletteParameters
     {
         public string FileName { get; set; }

@@ -74,6 +74,7 @@
     <Compile Include="PaletteReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.cs" />
     <EmbeddedResource Include="UI\FormImage.resx">
       <DependentUpon>FormImage.cs</DependentUpon>
     </EmbeddedResource>

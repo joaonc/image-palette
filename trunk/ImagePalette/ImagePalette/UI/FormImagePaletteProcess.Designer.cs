@@ -35,20 +35,27 @@
             this.labelIndexedFromImage = new System.Windows.Forms.Label();
             this.labelLoaded = new System.Windows.Forms.Label();
             this.labelMatchedByDistance = new System.Windows.Forms.Label();
-            this.labelColorDistance = new System.Windows.Forms.Label();
+            this.labelDistance = new System.Windows.Forms.Label();
             this.numericUpDownDistance = new System.Windows.Forms.NumericUpDown();
             this.buttonOk = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.checkBoxApplyThresholdIndexed = new System.Windows.Forms.CheckBox();
+            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.paletteGridMatched = new ImagePalette.PaletteGrid();
+            this.paletteGridThreshold = new ImagePalette.PaletteGrid();
+            this.labelThresholdApplied = new System.Windows.Forms.Label();
             this.buttonPrevious = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
             this.panelSpectrum = new System.Windows.Forms.Panel();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.labelThresholdApplied = new System.Windows.Forms.Label();
-            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
-            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
-            this.paletteGridDistance = new ImagePalette.PaletteGrid();
-            this.paletteGridThreshold = new ImagePalette.PaletteGrid();
+            this.labelThresholdIndexed = new System.Windows.Forms.Label();
+            this.numericUpDownThresholdIndexed = new System.Windows.Forms.NumericUpDown();
+            this.labelThresholdIndexedPercent = new System.Windows.Forms.Label();
+            this.labelThresholdMatched = new System.Windows.Forms.Label();
+            this.numericUpDownThresholdMatched = new System.Windows.Forms.NumericUpDown();
+            this.labelThresholdMatchedPercent = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIndexed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDistance)).BeginInit();
@@ -64,6 +71,8 @@
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdMatched)).BeginInit();
             this.SuspendLayout();
             // 
             // labelImageOriginal
@@ -88,15 +97,15 @@
             // labelImageIndexed
             // 
             this.labelImageIndexed.AutoSize = true;
-            this.labelImageIndexed.Location = new System.Drawing.Point(13, 205);
+            this.labelImageIndexed.Location = new System.Drawing.Point(13, 186);
             this.labelImageIndexed.Name = "labelImageIndexed";
             this.labelImageIndexed.Size = new System.Drawing.Size(104, 13);
-            this.labelImageIndexed.TabIndex = 2;
+            this.labelImageIndexed.TabIndex = 1;
             this.labelImageIndexed.Text = "Indexed Color Image";
             // 
             // pictureBoxIndexed
             // 
-            this.pictureBoxIndexed.Location = new System.Drawing.Point(13, 222);
+            this.pictureBoxIndexed.Location = new System.Drawing.Point(13, 203);
             this.pictureBoxIndexed.Name = "pictureBoxIndexed";
             this.pictureBoxIndexed.Size = new System.Drawing.Size(176, 142);
             this.pictureBoxIndexed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -110,7 +119,7 @@
             this.labelIndexedFromImage.Location = new System.Drawing.Point(3, 0);
             this.labelIndexedFromImage.Name = "labelIndexedFromImage";
             this.labelIndexedFromImage.Size = new System.Drawing.Size(99, 13);
-            this.labelIndexedFromImage.TabIndex = 4;
+            this.labelIndexedFromImage.TabIndex = 0;
             this.labelIndexedFromImage.Text = "Indexed from image";
             // 
             // labelLoaded
@@ -119,7 +128,7 @@
             this.labelLoaded.Location = new System.Drawing.Point(3, 0);
             this.labelLoaded.Name = "labelLoaded";
             this.labelLoaded.Size = new System.Drawing.Size(43, 13);
-            this.labelLoaded.TabIndex = 6;
+            this.labelLoaded.TabIndex = 0;
             this.labelLoaded.Text = "Loaded";
             // 
             // labelMatchedByDistance
@@ -128,34 +137,34 @@
             this.labelMatchedByDistance.Location = new System.Drawing.Point(3, 0);
             this.labelMatchedByDistance.Name = "labelMatchedByDistance";
             this.labelMatchedByDistance.Size = new System.Drawing.Size(108, 13);
-            this.labelMatchedByDistance.TabIndex = 8;
+            this.labelMatchedByDistance.TabIndex = 0;
             this.labelMatchedByDistance.Text = "Matched by Distance";
             // 
-            // labelColorDistance
+            // labelDistance
             // 
-            this.labelColorDistance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelColorDistance.AutoSize = true;
-            this.labelColorDistance.Location = new System.Drawing.Point(13, 394);
-            this.labelColorDistance.Name = "labelColorDistance";
-            this.labelColorDistance.Size = new System.Drawing.Size(76, 13);
-            this.labelColorDistance.TabIndex = 10;
-            this.labelColorDistance.Text = "Color Distance";
+            this.labelDistance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelDistance.AutoSize = true;
+            this.labelDistance.Location = new System.Drawing.Point(10, 360);
+            this.labelDistance.Name = "labelDistance";
+            this.labelDistance.Size = new System.Drawing.Size(76, 13);
+            this.labelDistance.TabIndex = 2;
+            this.labelDistance.Text = "Color Distance";
             // 
             // numericUpDownDistance
             // 
             this.numericUpDownDistance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.numericUpDownDistance.Location = new System.Drawing.Point(95, 392);
+            this.numericUpDownDistance.Location = new System.Drawing.Point(113, 358);
             this.numericUpDownDistance.Name = "numericUpDownDistance";
             this.numericUpDownDistance.Size = new System.Drawing.Size(63, 20);
-            this.numericUpDownDistance.TabIndex = 11;
+            this.numericUpDownDistance.TabIndex = 3;
             // 
             // buttonOk
             // 
             this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(973, 398);
+            this.buttonOk.Location = new System.Drawing.Point(973, 410);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
-            this.buttonOk.TabIndex = 12;
+            this.buttonOk.TabIndex = 13;
             this.buttonOk.Text = "Ok";
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
@@ -165,20 +174,42 @@
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(228, 13);
+            this.splitContainer1.Location = new System.Drawing.Point(205, 13);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.checkBoxApplyThresholdIndexed);
             this.splitContainer1.Panel1.Controls.Add(this.paletteGridIndexed);
             this.splitContainer1.Panel1.Controls.Add(this.labelIndexedFromImage);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(820, 351);
-            this.splitContainer1.SplitterDistance = 248;
-            this.splitContainer1.TabIndex = 13;
+            this.splitContainer1.Size = new System.Drawing.Size(843, 363);
+            this.splitContainer1.SplitterDistance = 254;
+            this.splitContainer1.TabIndex = 10;
+            // 
+            // checkBoxApplyThresholdIndexed
+            // 
+            this.checkBoxApplyThresholdIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxApplyThresholdIndexed.AutoSize = true;
+            this.checkBoxApplyThresholdIndexed.Location = new System.Drawing.Point(149, -1);
+            this.checkBoxApplyThresholdIndexed.Name = "checkBoxApplyThresholdIndexed";
+            this.checkBoxApplyThresholdIndexed.Size = new System.Drawing.Size(102, 17);
+            this.checkBoxApplyThresholdIndexed.TabIndex = 2;
+            this.checkBoxApplyThresholdIndexed.Text = "Apply Threshold";
+            this.checkBoxApplyThresholdIndexed.UseVisualStyleBackColor = true;
+            // 
+            // paletteGridIndexed
+            // 
+            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
+            this.paletteGridIndexed.Name = "paletteGridIndexed";
+            this.paletteGridIndexed.Size = new System.Drawing.Size(248, 344);
+            this.paletteGridIndexed.TabIndex = 1;
             // 
             // splitContainer2
             // 
@@ -194,41 +225,19 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(568, 351);
-            this.splitContainer2.SplitterDistance = 178;
+            this.splitContainer2.Size = new System.Drawing.Size(585, 363);
+            this.splitContainer2.SplitterDistance = 183;
             this.splitContainer2.TabIndex = 14;
             // 
-            // buttonPrevious
+            // paletteGridLoaded
             // 
-            this.buttonPrevious.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonPrevious.Location = new System.Drawing.Point(776, 398);
-            this.buttonPrevious.Name = "buttonPrevious";
-            this.buttonPrevious.Size = new System.Drawing.Size(75, 23);
-            this.buttonPrevious.TabIndex = 14;
-            this.buttonPrevious.Text = "< Prev";
-            this.buttonPrevious.UseVisualStyleBackColor = true;
-            this.buttonPrevious.Click += new System.EventHandler(this.buttonPrevious_Click);
-            // 
-            // buttonNext
-            // 
-            this.buttonNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNext.Location = new System.Drawing.Point(857, 398);
-            this.buttonNext.Name = "buttonNext";
-            this.buttonNext.Size = new System.Drawing.Size(75, 23);
-            this.buttonNext.TabIndex = 15;
-            this.buttonNext.Text = "Next >";
-            this.buttonNext.UseVisualStyleBackColor = true;
-            this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
-            // 
-            // panelSpectrum
-            // 
-            this.panelSpectrum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelSpectrum.Location = new System.Drawing.Point(228, 382);
-            this.panelSpectrum.Name = "panelSpectrum";
-            this.panelSpectrum.Size = new System.Drawing.Size(416, 36);
-            this.panelSpectrum.TabIndex = 16;
-            this.panelSpectrum.Paint += new System.Windows.Forms.PaintEventHandler(this.panelSpectrum_Paint);
+            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridLoaded.Name = "paletteGridLoaded";
+            this.paletteGridLoaded.Size = new System.Drawing.Size(177, 343);
+            this.paletteGridLoaded.TabIndex = 1;
             // 
             // splitContainer3
             // 
@@ -238,16 +247,36 @@
             // 
             // splitContainer3.Panel1
             // 
-            this.splitContainer3.Panel1.Controls.Add(this.paletteGridDistance);
+            this.splitContainer3.Panel1.Controls.Add(this.paletteGridMatched);
             this.splitContainer3.Panel1.Controls.Add(this.labelMatchedByDistance);
             // 
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.paletteGridThreshold);
             this.splitContainer3.Panel2.Controls.Add(this.labelThresholdApplied);
-            this.splitContainer3.Size = new System.Drawing.Size(386, 351);
-            this.splitContainer3.SplitterDistance = 206;
+            this.splitContainer3.Size = new System.Drawing.Size(398, 363);
+            this.splitContainer3.SplitterDistance = 212;
             this.splitContainer3.TabIndex = 10;
+            // 
+            // paletteGridMatched
+            // 
+            this.paletteGridMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridMatched.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridMatched.Name = "paletteGridMatched";
+            this.paletteGridMatched.Size = new System.Drawing.Size(206, 343);
+            this.paletteGridMatched.TabIndex = 1;
+            // 
+            // paletteGridThreshold
+            // 
+            this.paletteGridThreshold.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridThreshold.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridThreshold.Name = "paletteGridThreshold";
+            this.paletteGridThreshold.Size = new System.Drawing.Size(176, 343);
+            this.paletteGridThreshold.TabIndex = 1;
             // 
             // labelThresholdApplied
             // 
@@ -258,62 +287,112 @@
             this.labelThresholdApplied.TabIndex = 0;
             this.labelThresholdApplied.Text = "Threshold Applied";
             // 
-            // paletteGridIndexed
+            // buttonPrevious
             // 
-            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.buttonPrevious.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonPrevious.Location = new System.Drawing.Point(776, 410);
+            this.buttonPrevious.Name = "buttonPrevious";
+            this.buttonPrevious.Size = new System.Drawing.Size(75, 23);
+            this.buttonPrevious.TabIndex = 11;
+            this.buttonPrevious.Text = "< Prev";
+            this.buttonPrevious.UseVisualStyleBackColor = true;
+            this.buttonPrevious.Click += new System.EventHandler(this.buttonPrevious_Click);
+            // 
+            // buttonNext
+            // 
+            this.buttonNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonNext.Location = new System.Drawing.Point(857, 410);
+            this.buttonNext.Name = "buttonNext";
+            this.buttonNext.Size = new System.Drawing.Size(75, 23);
+            this.buttonNext.TabIndex = 12;
+            this.buttonNext.Text = "Next >";
+            this.buttonNext.UseVisualStyleBackColor = true;
+            this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
+            // 
+            // panelSpectrum
+            // 
+            this.panelSpectrum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridIndexed.DataTable = null;
-            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
-            this.paletteGridIndexed.Name = "paletteGridIndexed";
-            this.paletteGridIndexed.Size = new System.Drawing.Size(242, 332);
-            this.paletteGridIndexed.TabIndex = 7;
+            this.panelSpectrum.Location = new System.Drawing.Point(228, 394);
+            this.panelSpectrum.Name = "panelSpectrum";
+            this.panelSpectrum.Size = new System.Drawing.Size(416, 36);
+            this.panelSpectrum.TabIndex = 14;
+            this.panelSpectrum.Paint += new System.Windows.Forms.PaintEventHandler(this.panelSpectrum_Paint);
             // 
-            // paletteGridLoaded
+            // labelThresholdIndexed
             // 
-            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridLoaded.DataTable = null;
-            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridLoaded.Name = "paletteGridLoaded";
-            this.paletteGridLoaded.Size = new System.Drawing.Size(172, 331);
-            this.paletteGridLoaded.TabIndex = 7;
+            this.labelThresholdIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelThresholdIndexed.AutoSize = true;
+            this.labelThresholdIndexed.Location = new System.Drawing.Point(10, 387);
+            this.labelThresholdIndexed.Name = "labelThresholdIndexed";
+            this.labelThresholdIndexed.Size = new System.Drawing.Size(95, 13);
+            this.labelThresholdIndexed.TabIndex = 4;
+            this.labelThresholdIndexed.Text = "Threshold Indexed";
             // 
-            // paletteGridDistance
+            // numericUpDownThresholdIndexed
             // 
-            this.paletteGridDistance.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridDistance.DataTable = null;
-            this.paletteGridDistance.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridDistance.Name = "paletteGridDistance";
-            this.paletteGridDistance.Size = new System.Drawing.Size(200, 331);
-            this.paletteGridDistance.TabIndex = 9;
+            this.numericUpDownThresholdIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numericUpDownThresholdIndexed.Location = new System.Drawing.Point(113, 385);
+            this.numericUpDownThresholdIndexed.Name = "numericUpDownThresholdIndexed";
+            this.numericUpDownThresholdIndexed.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDownThresholdIndexed.TabIndex = 5;
             // 
-            // paletteGridThreshold
+            // labelThresholdIndexedPercent
             // 
-            this.paletteGridThreshold.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridThreshold.DataTable = null;
-            this.paletteGridThreshold.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridThreshold.Name = "paletteGridThreshold";
-            this.paletteGridThreshold.Size = new System.Drawing.Size(170, 331);
-            this.paletteGridThreshold.TabIndex = 1;
+            this.labelThresholdIndexedPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelThresholdIndexedPercent.AutoSize = true;
+            this.labelThresholdIndexedPercent.Location = new System.Drawing.Point(180, 387);
+            this.labelThresholdIndexedPercent.Name = "labelThresholdIndexedPercent";
+            this.labelThresholdIndexedPercent.Size = new System.Drawing.Size(15, 13);
+            this.labelThresholdIndexedPercent.TabIndex = 6;
+            this.labelThresholdIndexedPercent.Text = "%";
+            // 
+            // labelThresholdMatched
+            // 
+            this.labelThresholdMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelThresholdMatched.AutoSize = true;
+            this.labelThresholdMatched.Location = new System.Drawing.Point(10, 414);
+            this.labelThresholdMatched.Name = "labelThresholdMatched";
+            this.labelThresholdMatched.Size = new System.Drawing.Size(99, 13);
+            this.labelThresholdMatched.TabIndex = 7;
+            this.labelThresholdMatched.Text = "Threshold Matched";
+            // 
+            // numericUpDownThresholdMatched
+            // 
+            this.numericUpDownThresholdMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numericUpDownThresholdMatched.Location = new System.Drawing.Point(113, 412);
+            this.numericUpDownThresholdMatched.Name = "numericUpDownThresholdMatched";
+            this.numericUpDownThresholdMatched.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDownThresholdMatched.TabIndex = 8;
+            // 
+            // labelThresholdMatchedPercent
+            // 
+            this.labelThresholdMatchedPercent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelThresholdMatchedPercent.AutoSize = true;
+            this.labelThresholdMatchedPercent.Location = new System.Drawing.Point(180, 414);
+            this.labelThresholdMatchedPercent.Name = "labelThresholdMatchedPercent";
+            this.labelThresholdMatchedPercent.Size = new System.Drawing.Size(15, 13);
+            this.labelThresholdMatchedPercent.TabIndex = 9;
+            this.labelThresholdMatchedPercent.Text = "%";
             // 
             // FormImagePaletteProcess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1060, 433);
+            this.ClientSize = new System.Drawing.Size(1060, 445);
+            this.Controls.Add(this.labelThresholdMatchedPercent);
+            this.Controls.Add(this.numericUpDownThresholdMatched);
+            this.Controls.Add(this.labelThresholdMatched);
+            this.Controls.Add(this.labelThresholdIndexedPercent);
+            this.Controls.Add(this.numericUpDownThresholdIndexed);
+            this.Controls.Add(this.labelThresholdIndexed);
             this.Controls.Add(this.panelSpectrum);
             this.Controls.Add(this.buttonNext);
             this.Controls.Add(this.buttonPrevious);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.numericUpDownDistance);
-            this.Controls.Add(this.labelColorDistance);
+            this.Controls.Add(this.labelDistance);
             this.Controls.Add(this.pictureBoxIndexed);
             this.Controls.Add(this.labelImageIndexed);
             this.Controls.Add(this.pictureBoxOriginal);
@@ -342,6 +421,8 @@
             this.splitContainer3.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdMatched)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -356,7 +437,7 @@
         private System.Windows.Forms.Label labelIndexedFromImage;
         private System.Windows.Forms.Label labelLoaded;
         private System.Windows.Forms.Label labelMatchedByDistance;
-        private System.Windows.Forms.Label labelColorDistance;
+        private System.Windows.Forms.Label labelDistance;
         private System.Windows.Forms.NumericUpDown numericUpDownDistance;
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.SplitContainer splitContainer1;
@@ -366,9 +447,16 @@
         private System.Windows.Forms.Panel panelSpectrum;
         private PaletteGrid paletteGridIndexed;
         private PaletteGrid paletteGridLoaded;
-        private PaletteGrid paletteGridDistance;
+        private PaletteGrid paletteGridMatched;
         private System.Windows.Forms.SplitContainer splitContainer3;
         private PaletteGrid paletteGridThreshold;
         private System.Windows.Forms.Label labelThresholdApplied;
+        private System.Windows.Forms.Label labelThresholdIndexed;
+        private System.Windows.Forms.NumericUpDown numericUpDownThresholdIndexed;
+        private System.Windows.Forms.Label labelThresholdIndexedPercent;
+        private System.Windows.Forms.Label labelThresholdMatched;
+        private System.Windows.Forms.NumericUpDown numericUpDownThresholdMatched;
+        private System.Windows.Forms.Label labelThresholdMatchedPercent;
+        private System.Windows.Forms.CheckBox checkBoxApplyThresholdIndexed;
     }
 }
