@@ -168,11 +168,11 @@ namespace ImagePalette
             // Util.GetMemberInfo in order to have strong typed info in case of code refactoring
             if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.ThresholdIndexed).Name))
             {
-                GetIndexedTable(Parameters.ApplyThresholdIndexed);
+                CalculateIndexedColors(Parameters.ApplyThresholdIndexed);
             }
             else if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdIndexed).Name))
             {
-                GetIndexedTable(Parameters.ApplyThresholdIndexed);
+                CalculateIndexedColors(Parameters.ApplyThresholdIndexed);
             }
         }
 
@@ -258,10 +258,6 @@ namespace ImagePalette
                     {
                         DataRow row = DataTableLoaded.NewRow();
                         row[PaletteGridColumns.Color] = color;
-                        row[PaletteGridColumns.R] = color.R;
-                        row[PaletteGridColumns.G] = color.G;
-                        row[PaletteGridColumns.B] = color.B;
-                        row[PaletteGridColumns.A] = color.A;
 
                         DataTableLoaded.Rows.Add(row);
                     }
@@ -297,8 +293,9 @@ namespace ImagePalette
                     LoadPalette();
                 }
 
-                GetIndexedTable(false, forceReprocess);
-                GetMatchedTable(false, false, forceReprocess);
+                CalculateIndexedColors(forceReprocess);
+                CalculateColorDistances(forceReprocess);
+                CalculateMatchedColors(forceReprocess);
 
                 CurrentImageIsProcessed = true;
                 processed = true;
@@ -345,7 +342,7 @@ namespace ImagePalette
         /// <param name="applyThreshold"></param>
         /// <param name="forceReprocess"></param>
         /// <returns></returns>
-        public DataTable GetIndexedTable(bool applyThreshold, bool forceReprocess = false)
+        private void CalculateIndexedColors(bool forceReprocess = false)
         {
             if (forceReprocess || !CurrentImageIsProcessed)
             {
@@ -399,10 +396,6 @@ namespace ImagePalette
 
                     DataRow row = DataTableIndexed.NewRow();
                     row[PaletteGridColumns.Color] = color;
-                    row[PaletteGridColumns.R] = color.R;
-                    row[PaletteGridColumns.G] = color.G;
-                    row[PaletteGridColumns.B] = color.B;
-                    row[PaletteGridColumns.A] = color.A;
                     row[PaletteGridColumns.Count] = count;
                     row[PaletteGridColumns.Percentage] = (double)(count * 100) / (double)totalPixels;
 
@@ -412,12 +405,12 @@ namespace ImagePalette
                 DataTableIndexed.DefaultView.Sort = PaletteGridColumns.Count + " DESC";
             }
 
-            DataTableIndexed.DefaultView.RowFilter = applyThreshold ? string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdIndexed) : null;
-
-            return DataTableIndexed;
+            bool applyThresholdIndexed = Parameters.ApplyThresholdIndexed;  // ExploreMode not taken into consideration here
+            DataTableIndexed.DefaultView.RowFilter = 
+                applyThresholdIndexed ? string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdIndexed) : null;
         }
 
-        public DataTable GetMatchedTable(bool applyCountThreshold, bool applyDistanceThreshold, bool forceReprocess = false)
+        private void CalculateColorDistances(bool forceReprocess = false)
         {
             if (forceReprocess || !CurrentImageIsProcessed)
             {
@@ -425,13 +418,14 @@ namespace ImagePalette
                     throw new Exception("Need to have both the indexed and loaded colors to match by distance.");
 
                 // Apply index threshold if necessary
-                // The threshold is already applied to the default view of the DataTableIndexed
-                DataTable dtIndexed = Parameters.ApplyThresholdIndexed ? DataTableIndexed.DefaultView.ToTable() : DataTableIndexed;
+                bool applyThresholdIndexed = !Parameters.ExploreMode && Parameters.ApplyThresholdIndexed;
 
                 HashSet<Color> palette = GetPalette();
-                DataTableMatched.Rows.Clear();
-                foreach (DataRow rowIndexed in dtIndexed.Rows)
+                foreach (DataRow rowIndexed in DataTableIndexed.Rows)
                 {
+                    if (applyThresholdIndexed && (double)rowIndexed[PaletteGridColumns.Percentage] < Parameters.ThresholdIndexed)
+                        continue;  // Skip all calculations below if they're not necessary
+
                     Color colorIndexed = (Color)rowIndexed[PaletteGridColumns.Color];
 
                     Color colorMatched = Color.White;  // Just a color to initialize given Color is non-nullable
@@ -455,27 +449,70 @@ namespace ImagePalette
                     {
                         rowIndexed[PaletteGridColumns.Match] = colorMatched;
                         rowIndexed[PaletteGridColumns.Distance] = distanceClosest;
-                        DataRow row = DataTableMatched.NewRow();
                     }
                 }
 
                 string filterIndexCount = string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdMatched);
-                string filterDistance = string.Format("[{0}] >= {1}", PaletteGridColumns.Distance, Parameters.Distance);
+                string filterDistance = string.Format("[{0}] < {1}", PaletteGridColumns.Distance, Parameters.Distance);
 
+                bool applyThresholdDistance = !Parameters.ExploreMode && Parameters.ApplyThresholdDistance;
                 string filter = "";
-                if (applyCountThreshold)
+                if (applyThresholdIndexed)
                     filter += filterIndexCount;
-                if (applyDistanceThreshold)
+                if (applyThresholdDistance)
                 {
-                    if (applyCountThreshold)
+                    if (applyThresholdIndexed)
                         filter += " AND ";
                     filter += filterDistance;
                 }
 
                 DataTableMatched.DefaultView.RowFilter = string.IsNullOrEmpty(filter) ? null : filter;
             }
+        }
 
-            return DataTableMatched;
+        private void CalculateMatchedColors(bool forceReprocess = false)
+        {
+            if (forceReprocess || !CurrentImageIsProcessed)
+            {
+                bool applyThresholdMatched = !Parameters.ExploreMode && Parameters.ApplyThresholdMatched;
+                bool applyThresholdDistance = !Parameters.ExploreMode && Parameters.ApplyThresholdDistance;
+                string filterDistance = applyThresholdDistance ? string.Format("[{0}] < {1}", PaletteGridColumns.Distance, Parameters.Distance) : null;
+
+                // Get the rows where the matched color has been calculated
+                // Sort by Matched color, which will help later in adding the number of ocurrences of each color
+                DataView dvIndexed = new DataView(DataTableIndexed, filterDistance, PaletteGridColumns.Match, DataViewRowState.CurrentRows);
+
+                // Build the table with the matched colors
+                DataTableMatched.Rows.Clear();
+                Color currentColor = Color.White;  // Any color since it's a non nullable object
+                DataRow matchedRow = null;
+                foreach (DataRowView drvIndexed in dvIndexed)
+                {
+                    DataRow rowIndexed = drvIndexed.Row;
+                    Color newColor = (Color)rowIndexed[PaletteGridColumns.Match];
+
+                    if (matchedRow == null || !newColor.Equals(currentColor))
+                    {
+                        currentColor = (Color)rowIndexed[PaletteGridColumns.Match];
+                        matchedRow = DataTableMatched.NewRow();
+                        matchedRow[PaletteGridColumns.Color] = currentColor;
+                        matchedRow[PaletteGridColumns.Count] = (int)rowIndexed[PaletteGridColumns.Count];
+
+                        DataTableMatched.Rows.Add(matchedRow);
+                        currentColor = newColor;
+                    }
+                    else
+                    {
+                        matchedRow[PaletteGridColumns.Count] =
+                            (int)matchedRow[PaletteGridColumns.Count] + (int)rowIndexed[PaletteGridColumns.Count];
+                    }
+                }
+
+                string filterMatched = applyThresholdMatched ? string.Format("[{0}] < {1}", PaletteGridColumns.Count, Parameters.ThresholdMatched) : null;
+
+                DataTableMatched.DefaultView.Sort = PaletteGridColumns.Count + " DESC";
+                DataTableMatched.DefaultView.RowFilter = string.IsNullOrEmpty(filterMatched) ? null : filterMatched;
+            }
         }
     }
 }
