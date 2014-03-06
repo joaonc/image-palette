@@ -231,9 +231,9 @@
             this.labelDistance.AutoSize = true;
             this.labelDistance.Location = new System.Drawing.Point(5, 78);
             this.labelDistance.Name = "labelDistance";
-            this.labelDistance.Size = new System.Drawing.Size(76, 13);
+            this.labelDistance.Size = new System.Drawing.Size(99, 13);
             this.labelDistance.TabIndex = 2;
-            this.labelDistance.Text = "Color Distance";
+            this.labelDistance.Text = "Max Color Distance";
             // 
             // labelCoverage
             // 

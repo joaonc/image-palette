@@ -98,6 +98,13 @@ namespace ImagePalette
             set { SetProperty<int>(ref thresholdMatched, value); }
         }
 
+        private bool applyThresholdDistance;
+        public bool ApplyThresholdDistance
+        {
+            get { return applyThresholdDistance; }
+            set { SetProperty<bool>(ref applyThresholdDistance, value); }
+        }
+
         private bool applyThresholdIndexed;
         public bool ApplyThresholdIndexed
         {
@@ -110,6 +117,20 @@ namespace ImagePalette
         {
             get { return applyThresholdMatched; }
             set { SetProperty<bool>(ref applyThresholdMatched, value); }
+        }
+
+        private bool exploreMode;
+        /// <summary>
+        /// This mode makes the algorithms calculate every value regardless of thresholds applied.
+        /// The UI then takes care of filtering to apply the threshold.
+        /// Makes it quicker for the UI to refresh when thresholds are switched between apply/not apply,
+        /// which makes exploration with UI faster.
+        /// This option should be turned off for final processing (especially batch operations) as it's slower.
+        /// </summary>
+        public bool ExploreMode
+        {
+            get { return exploreMode; }
+            set { SetProperty<bool>(ref exploreMode, value); }
         }
 
         #endregion

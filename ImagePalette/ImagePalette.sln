@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagePalette", "ImagePalette\ImagePalette.csproj", "{2AD2D933-EC00-4D73-97BC-CD2246B372B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImagePaletteUnitTest", "ImagePaletteUnitTest\ImagePaletteUnitTest.csproj", "{9F876298-B37E-47FA-A493-327C1DDAF30A}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -17,6 +19,10 @@ Global
 		{2AD2D933-EC00-4D73-97BC-CD2246B372B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AD2D933-EC00-4D73-97BC-CD2246B372B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AD2D933-EC00-4D73-97BC-CD2246B372B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F876298-B37E-47FA-A493-327C1DDAF30A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F876298-B37E-47FA-A493-327C1DDAF30A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F876298-B37E-47FA-A493-327C1DDAF30A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F876298-B37E-47FA-A493-327C1DDAF30A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

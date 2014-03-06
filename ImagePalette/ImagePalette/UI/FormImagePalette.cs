@@ -27,8 +27,9 @@ namespace ImagePalette
             parameters.FileNameReference = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\colors.pal";
             parameters.Coverage = 100;
             parameters.Distance = 1000;
+            parameters.ThresholdIndexed = 8;
             parameters.ThresholdMatched = 10;
-            parameters.ThresholdIndexed = 10;
+            parameters.ExploreMode = true;
 
             // Set UI bindings
             try
