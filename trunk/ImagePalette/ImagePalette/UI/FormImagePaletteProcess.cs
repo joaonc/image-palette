@@ -57,7 +57,11 @@ namespace ImagePalette
                 numericUpDownThresholdMatched.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
                 numericUpDownThresholdMatched.DataBindings.Add("Value", PaletteProcessor.Parameters,
                     Util.GetMemberInfo((ImagePaletteParameters s) => s.ThresholdMatched).Name);
-                
+
+                checkBoxApplyThresholdDistance.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+                checkBoxApplyThresholdDistance.DataBindings.Add("Checked", PaletteProcessor.Parameters,
+                    Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdDistance).Name);
+
                 checkBoxApplyThresholdIndexed.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
                 checkBoxApplyThresholdIndexed.DataBindings.Add("Checked", PaletteProcessor.Parameters, 
                     Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdIndexed).Name);
@@ -65,6 +69,10 @@ namespace ImagePalette
                 checkBoxApplyThresholdMatched.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
                 checkBoxApplyThresholdMatched.DataBindings.Add("Checked", PaletteProcessor.Parameters,
                     Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdMatched).Name);
+
+                checkBoxExploreMode.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+                checkBoxExploreMode.DataBindings.Add("Checked", PaletteProcessor.Parameters,
+                    Util.GetMemberInfo((ImagePaletteParameters s) => s.ExploreMode).Name);
 
                 paletteGridIndexed.DataGridView.DataSource = PaletteProcessor.DataTableIndexed.DefaultView;
                 paletteGridLoaded.DataGridView.DataSource = PaletteProcessor.DataTableLoaded.DefaultView;

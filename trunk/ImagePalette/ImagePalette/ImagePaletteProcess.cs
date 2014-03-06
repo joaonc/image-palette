@@ -285,7 +285,7 @@ namespace ImagePalette
         /// 
         /// </summary>
         /// <param name="forceReprocess"></param>
-        /// <returns></returns>
+        /// <returns>Wether the process took place or it was already done.</returns>
         public bool ProcessCurrent(bool forceReprocess=false)
         {
             bool processed = false;
@@ -298,7 +298,7 @@ namespace ImagePalette
                 }
 
                 GetIndexedTable(false, forceReprocess);
-                GetMatchedTable(false, forceReprocess);
+                GetMatchedTable(false, false, forceReprocess);
 
                 CurrentImageIsProcessed = true;
                 processed = true;
@@ -417,7 +417,7 @@ namespace ImagePalette
             return DataTableIndexed;
         }
 
-        public DataTable GetMatchedTable(bool applyThreshold, bool forceReprocess = false)
+        public DataTable GetMatchedTable(bool applyCountThreshold, bool applyDistanceThreshold, bool forceReprocess = false)
         {
             if (forceReprocess || !CurrentImageIsProcessed)
             {
@@ -456,14 +456,23 @@ namespace ImagePalette
                         rowIndexed[PaletteGridColumns.Match] = colorMatched;
                         rowIndexed[PaletteGridColumns.Distance] = distanceClosest;
                         DataRow row = DataTableMatched.NewRow();
-                        //row[PaletteGridColumns.A]
-
-                        //DataTableMatched.Rows.Add(row);
                     }
                 }
 
+                string filterIndexCount = string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdMatched);
+                string filterDistance = string.Format("[{0}] >= {1}", PaletteGridColumns.Distance, Parameters.Distance);
 
-                DataTableMatched.DefaultView.RowFilter = applyThreshold ? string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdMatched) : null;
+                string filter = "";
+                if (applyCountThreshold)
+                    filter += filterIndexCount;
+                if (applyDistanceThreshold)
+                {
+                    if (applyCountThreshold)
+                        filter += " AND ";
+                    filter += filterDistance;
+                }
+
+                DataTableMatched.DefaultView.RowFilter = string.IsNullOrEmpty(filter) ? null : filter;
             }
 
             return DataTableMatched;
