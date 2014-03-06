@@ -17,14 +17,70 @@ namespace ImagePalette
     /// </summary>
     public partial class PaletteGrid : UserControl
     {
-        public PaletteGrid()
+        private bool showRgbaColumns;
+
+        private string[] columnNamesRgba = new string[] {
+                        PaletteGridColumns.A,
+                        PaletteGridColumns.R,
+                        PaletteGridColumns.G,
+                        PaletteGridColumns.B };
+
+        public PaletteGrid(bool showRgbColumns=false)
         {
             InitializeComponent();
+            this.showRgbaColumns = false;
         }
 
         public DataGridView DataGridView
         {
             get { return dataGridView; }
+        }
+
+        public bool ShowRgbaColumns
+        {
+            get { return showRgbaColumns; }
+            set
+            {
+                showRgbaColumns = value;
+
+                foreach (string columnName in columnNamesRgba)
+                {
+                    if (dataGridView.Columns.Contains(columnName))
+                    {
+                        dataGridView.Columns[columnName].Visible = showRgbaColumns;
+                    }
+                }
+
+                if (showRgbaColumns)
+                {
+                    // Make sure the columns have values
+                    if (dataGridView.DataSource is DataView)
+                    {
+                        foreach (DataRowView dvRow in (DataView)dataGridView.DataSource)
+                        {
+                            foreach (string columnName in columnNamesRgba)
+                            {
+                                Color color = (Color)dvRow[PaletteGridColumns.Color];
+                                if (dvRow[columnName] == null)
+                                {
+                                    if (columnName == PaletteGridColumns.A)
+                                        dvRow[columnName] = color.A;
+                                    else if (columnName == PaletteGridColumns.R)
+                                        dvRow[columnName] = color.R;
+                                    else if (columnName == PaletteGridColumns.G)
+                                        dvRow[columnName] = color.B;
+                                    else if (columnName == PaletteGridColumns.B)
+                                        dvRow[columnName] = color.B;
+                                    else
+                                        throw new Exception("Unexpected column: " + columnName);
+                                }
+                            }
+                        }
+                    }
+                    else
+                        throw new NotImplementedException("Need to handle " + dataGridView.DataSource.GetType().Name);
+                }
+            }
         }
 
         private void PaletteGrid_Load(object sender, EventArgs e)
@@ -127,6 +183,42 @@ namespace ImagePalette
                 colors.Add(GetColorInRow(row));
 
             return colors;
+        }
+
+        private void dataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            ClickEventHandler(sender, e);
+        }
+
+        private void dataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            ClickEventHandler(sender, e);
+        }
+
+        private void ClickEventHandler(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                // Create and show menu
+                ContextMenu menu = new ContextMenu();
+                MenuItem miShowRgb = new MenuItem("Show RGBA Columns");
+                miShowRgb.Checked = ShowRgbaColumns;
+                miShowRgb.Click += delegate { ShowRgbaColumns = !ShowRgbaColumns; };
+                menu.MenuItems.Add(miShowRgb);
+
+                menu.Show(dataGridView, new Point(e.X, e.Y));
+            }
+        }
+
+        private void dataGridView_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            if (columnNamesRgba.Contains(e.Column.Name) && !ShowRgbaColumns)
+                e.Column.Visible = false;
+        }
+
+        private void dataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+
         }
     }
 }
