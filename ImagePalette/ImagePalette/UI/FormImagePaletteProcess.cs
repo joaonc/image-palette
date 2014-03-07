@@ -74,6 +74,7 @@ namespace ImagePalette
                 checkBoxExploreMode.DataBindings.Add("Checked", PaletteProcessor.Parameters,
                     Util.GetMemberInfo((ImagePaletteParameters s) => s.ExploreMode).Name);
 
+                // DataSource is the DataView instead of DataTable to account for filtering and sorting
                 paletteGridIndexed.DataGridView.DataSource = PaletteProcessor.DataTableIndexed.DefaultView;
                 paletteGridLoaded.DataGridView.DataSource = PaletteProcessor.DataTableLoaded.DefaultView;
                 paletteGridMatched.DataGridView.DataSource = PaletteProcessor.DataTableMatched.DefaultView;

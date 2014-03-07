@@ -168,11 +168,19 @@ namespace ImagePalette
             // Util.GetMemberInfo in order to have strong typed info in case of code refactoring
             if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.ThresholdIndexed).Name))
             {
-                CalculateIndexedColors(Parameters.ApplyThresholdIndexed);
+                ApplyDataTableIndexedViewFilter();
             }
             else if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdIndexed).Name))
             {
-                CalculateIndexedColors(Parameters.ApplyThresholdIndexed);
+                ApplyDataTableIndexedViewFilter();
+            }
+            else if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.Distance).Name))
+            {
+                ApplyDataTableIndexedViewFilter();
+            }
+            else if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.ApplyThresholdDistance).Name))
+            {
+                ApplyDataTableIndexedViewFilter();
             }
         }
 
@@ -405,9 +413,7 @@ namespace ImagePalette
                 DataTableIndexed.DefaultView.Sort = PaletteGridColumns.Count + " DESC";
             }
 
-            bool applyThresholdIndexed = Parameters.ApplyThresholdIndexed;  // ExploreMode not taken into consideration here
-            DataTableIndexed.DefaultView.RowFilter = 
-                applyThresholdIndexed ? string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdIndexed) : null;
+            ApplyDataTableIndexedViewFilter();
         }
 
         private void CalculateColorDistances(bool forceReprocess = false)
@@ -513,6 +519,25 @@ namespace ImagePalette
                 DataTableMatched.DefaultView.Sort = PaletteGridColumns.Count + " DESC";
                 DataTableMatched.DefaultView.RowFilter = string.IsNullOrEmpty(filterMatched) ? null : filterMatched;
             }
+        }
+
+        private void ApplyDataTableIndexedViewFilter()
+        {
+            string filterIndexCount = string.Format("[{0}] >= {1}", PaletteGridColumns.Percentage, Parameters.ThresholdIndexed);
+            string filterDistance = string.Format("[{0}] < {1}", PaletteGridColumns.Distance, Parameters.Distance);
+
+            bool applyThresholdDistance = !Parameters.ExploreMode && Parameters.ApplyThresholdDistance;
+            string filter = "";
+            if (Parameters.ApplyThresholdIndexed)
+                filter += filterIndexCount;
+            if (Parameters.ApplyThresholdDistance)
+            {
+                if (Parameters.ApplyThresholdIndexed)
+                    filter += " AND ";
+                filter += filterDistance;
+            }
+
+            DataTableIndexed.DefaultView.RowFilter = string.IsNullOrEmpty(filter) ? null : filter;
         }
     }
 }
