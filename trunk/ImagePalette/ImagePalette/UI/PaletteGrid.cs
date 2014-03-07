@@ -25,10 +25,16 @@ namespace ImagePalette
                         PaletteGridColumns.G,
                         PaletteGridColumns.B };
 
-        public PaletteGrid(bool showRgbColumns=false)
+        public PaletteGrid()
         {
             InitializeComponent();
             this.showRgbaColumns = false;
+        }
+
+        public PaletteGrid(bool showRgbaColumns)
+        {
+            InitializeComponent();
+            this.showRgbaColumns = showRgbaColumns;
         }
 
         public DataGridView DataGridView
@@ -44,47 +50,46 @@ namespace ImagePalette
                 showRgbaColumns = value;
 
                 foreach (string columnName in columnNamesRgba)
-                {
                     if (dataGridView.Columns.Contains(columnName))
-                    {
                         dataGridView.Columns[columnName].Visible = showRgbaColumns;
-                    }
-                }
 
                 if (showRgbaColumns)
-                {
-                    // Make sure the columns have values
-                    if (dataGridView.DataSource is DataView)
-                    {
-                        foreach (DataRowView dvRow in (DataView)dataGridView.DataSource)
-                        {
-                            foreach (string columnName in columnNamesRgba)
-                            {
-                                Color color = (Color)dvRow[PaletteGridColumns.Color];
-                                if (dvRow[columnName] == null)
-                                {
-                                    if (columnName == PaletteGridColumns.A)
-                                        dvRow[columnName] = color.A;
-                                    else if (columnName == PaletteGridColumns.R)
-                                        dvRow[columnName] = color.R;
-                                    else if (columnName == PaletteGridColumns.G)
-                                        dvRow[columnName] = color.B;
-                                    else if (columnName == PaletteGridColumns.B)
-                                        dvRow[columnName] = color.B;
-                                    else
-                                        throw new Exception("Unexpected column: " + columnName);
-                                }
-                            }
-                        }
-                    }
-                    else
-                        throw new NotImplementedException("Need to handle " + dataGridView.DataSource.GetType().Name);
-                }
+                    PopulateRgbaColumns();
             }
         }
 
         private void PaletteGrid_Load(object sender, EventArgs e)
         {
+        }
+
+        private void PopulateRgbaColumns()
+        {
+            // Make sure the columns have values
+            if (dataGridView.DataSource is DataView)
+            {
+                foreach (DataRowView dvRow in (DataView)dataGridView.DataSource)
+                {
+                    foreach (string columnName in columnNamesRgba)
+                    {
+                        Color color = (Color)dvRow[PaletteGridColumns.Color];
+                        if (dvRow[columnName] is DBNull)
+                        {
+                            if (columnName == PaletteGridColumns.A)
+                                dvRow[columnName] = color.A;
+                            else if (columnName == PaletteGridColumns.R)
+                                dvRow[columnName] = color.R;
+                            else if (columnName == PaletteGridColumns.G)
+                                dvRow[columnName] = color.B;
+                            else if (columnName == PaletteGridColumns.B)
+                                dvRow[columnName] = color.B;
+                            else
+                                throw new Exception("Unexpected column: " + columnName);
+                        }
+                    }
+                }
+            }
+            else
+                throw new NotImplementedException("Need to handle " + dataGridView.DataSource.GetType().Name);
         }
 
         /// <summary>
