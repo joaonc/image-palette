@@ -63,11 +63,18 @@ namespace ImagePalette
             set { SetProperty<string>(ref fileName, value); }
         }
 
-        private string fileNameReference; 
+        private string fileNameReference;
         public string FileNameReference
         {
             get { return fileNameReference; }
             set { SetProperty<string>(ref fileNameReference, value); }
+        }
+
+        private string fileNameOutput;
+        public string FileNameOutput
+        {
+            get { return fileNameOutput; }
+            set { SetProperty<string>(ref fileNameOutput, value); }
         }
 
         private int coverage;

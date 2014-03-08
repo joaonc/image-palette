@@ -25,6 +25,7 @@ namespace ImagePalette
             parameters = new ImagePaletteParameters();
             parameters.FileName = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\CCMG707.jpg";
             parameters.FileNameReference = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\colors.pal";
+            parameters.FileNameOutput = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\output.xml";
             parameters.Coverage = 100;
             parameters.Distance = 1000;
             parameters.ThresholdIndexed = 8;

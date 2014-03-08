@@ -37,6 +37,8 @@ namespace ImagePalette
         public Image CurrentImageOriginal { get; private set; }
         public Image CurrentImageIndexed { get; private set; }
 
+        public ImagePaletteResults Results { get; private set; }
+
         // Events raised in this class
         public event ImageChangedHandler ImageChangedEvent;
 
@@ -86,6 +88,8 @@ namespace ImagePalette
                 new DataColumn(PaletteGridColumns.B, typeof(int)),
                 new DataColumn(PaletteGridColumns.A, typeof(int))
             });
+
+            Results = new ImagePaletteResults(parameters);
         }
 
         /// <summary>
@@ -301,10 +305,18 @@ namespace ImagePalette
                     LoadPalette();
                 }
 
+                // Calculation steps
                 CalculateIndexedColors(forceReprocess);
                 CalculateColorDistances(forceReprocess);
                 CalculateMatchedColors(forceReprocess);
 
+                // Update results
+                DictionarySerializable<Color, int> fileResult = new DictionarySerializable<Color, int>(DataTableMatched.DefaultView.Count);
+                foreach (DataRowView row in DataTableMatched.DefaultView)
+                    fileResult.Add((Color)row[PaletteGridColumns.Color], (int)row[PaletteGridColumns.Count]);
+                Results.FileResults[CurrentFileName] = fileResult;
+
+                // Set processed flags
                 CurrentImageIsProcessed = true;
                 processed = true;
             }
