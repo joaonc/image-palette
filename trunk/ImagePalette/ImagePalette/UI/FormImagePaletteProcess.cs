@@ -110,6 +110,7 @@ namespace ImagePalette
 
         private void buttonOk_Click(object sender, EventArgs e)
         {
+            PaletteProcessor.Results.Save();
             Close();
         }
 
