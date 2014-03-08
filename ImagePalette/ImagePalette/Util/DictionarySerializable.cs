@@ -13,7 +13,7 @@ namespace ImagePalette
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TVal"></typeparam>
     // Code taken from http://www.dacris.com/blog/2010/07/31/c-serializable-dictionary-a-working-example/
-    [Serializable()]
+    [Serializable]
     public class DictionarySerializable<TKey, TVal> : Dictionary<TKey, TVal>, IXmlSerializable, ISerializable
     {
         #region Constants
