@@ -311,7 +311,7 @@ namespace ImagePalette
                 CalculateMatchedColors(forceReprocess);
 
                 // Update results
-                DictionarySerializable<Color, int> fileResult = new DictionarySerializable<Color, int>(DataTableMatched.DefaultView.Count);
+                DictionarySerializable<ColorSerializable, int> fileResult = new DictionarySerializable<ColorSerializable, int>(DataTableMatched.DefaultView.Count);
                 foreach (DataRowView row in DataTableMatched.DefaultView)
                     fileResult.Add((Color)row[PaletteGridColumns.Color], (int)row[PaletteGridColumns.Count]);
                 Results.FileResults[CurrentFileName] = fileResult;
