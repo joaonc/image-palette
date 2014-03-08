@@ -44,8 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DictionarySerializable.cs" />
-    <Compile Include="ImagePaletteResults.cs" />
+    <Compile Include="Util\DictionarySerializable.cs" />
+    <Compile Include="Business\ImagePaletteResults.cs" />
     <Compile Include="UI\FormImage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,19 +64,19 @@
     <Compile Include="UI\FormImagePalette.Designer.cs">
       <DependentUpon>FormImagePalette.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImagePaletteParameters.cs" />
-    <Compile Include="ImagePaletteProcess.cs" />
+    <Compile Include="Business\ImagePaletteParameters.cs" />
+    <Compile Include="Business\ImagePaletteProcess.cs" />
     <Compile Include="UI\PaletteGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UI\PaletteGrid.Designer.cs">
       <DependentUpon>PaletteGrid.cs</DependentUpon>
     </Compile>
-    <Compile Include="PaletteGridColumns.cs" />
-    <Compile Include="PaletteReader.cs" />
+    <Compile Include="Business\PaletteGridColumns.cs" />
+    <Compile Include="Util\PaletteReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="Util\Util.cs" />
     <EmbeddedResource Include="UI\FormImage.resx">
       <DependentUpon>FormImage.cs</DependentUpon>
     </EmbeddedResource>
