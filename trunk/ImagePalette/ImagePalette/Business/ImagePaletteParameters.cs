@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace ImagePalette
@@ -56,11 +57,16 @@ namespace ImagePalette
 
         #region Properties
 
-        private string fileName;
-        public string FileName
+        private List<string> fileNames;
+        /// <summary>
+        /// The input files.
+        /// This list may contain directories, so in order to get the full list of files, use the GetExpandedFileNames() method.
+        /// Note that if the list's contents are changed, the OnPropertyChanged event is not fired.
+        /// </summary>
+        public List<string> FileNames
         {
-            get { return fileName; }
-            set { SetProperty<string>(ref fileName, value); }
+            get { return fileNames; }
+            set { SetProperty<List<string>>(ref fileNames, value); }
         }
 
         private string fileNameReference;
@@ -138,6 +144,42 @@ namespace ImagePalette
         {
             get { return exploreMode; }
             set { SetProperty<bool>(ref exploreMode, value); }
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Gets the full list of filenames with possible directories in the property FileNames expanded.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetExpandedFileNames()
+        {
+            List<string> expandedFileNames = new List<string>();
+
+            if (FileNames != null)
+            {
+                foreach (string fileName in FileNames)
+                {
+                    if (!string.IsNullOrWhiteSpace(fileName))
+                    {
+                        if (Directory.Exists(fileName))
+                        {
+                            // Directory
+                            expandedFileNames.AddRange(Directory.GetFiles(fileName));
+                        }
+                        else if (File.Exists(fileName))
+                        {
+                            // File
+                            expandedFileNames.Add(fileName);
+                        }
+                        // else it's neither a file nor a directory, doesn't exist
+                    }
+                }
+            }
+
+            return expandedFileNames;
         }
 
         #endregion

@@ -30,7 +30,7 @@ namespace ImagePalette
         public DataTable DataTableLoaded { get; private set; }
         public DataTable DataTableMatched { get; private set; }
 
-        public List<string> FileNames { get; private set; }
+        public List<string> FileNamesExpanded { get; private set; }
         public int CurrentFileIndex { get; private set; }
         public bool CurrentImageIsProcessed { get; private set; }
 
@@ -50,7 +50,7 @@ namespace ImagePalette
             Parameters.PropertyChanged += new PropertyChangedEventHandler(imagePaletteParameters_PropertyChanged);
 
             // Get the files to process
-            FileNames = new List<string>();
+            FileNamesExpanded = new List<string>();
             GetFileNames();
 
             // Indexed from image
@@ -186,6 +186,11 @@ namespace ImagePalette
             {
                 ApplyDataTableIndexedViewFilter();
             }
+            else if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.FileNames).Name))
+            {
+                GetFileNames();
+                ProcessCurrent();
+            }
         }
 
         /// <summary>
@@ -224,33 +229,19 @@ namespace ImagePalette
         /// </summary>
         private void GetFileNames()
         {
-            FileNames.Clear();
+            FileNamesExpanded.Clear();
             CurrentFileIndex = 0;
             CurrentImageIsProcessed = false;
-
-            if (!string.IsNullOrWhiteSpace(Parameters.FileName))
-            {
-                if (Directory.Exists(Parameters.FileName))
-                {
-                    // Directory
-                    FileNames.AddRange(Directory.GetFiles(Parameters.FileName));
-                }
-                else if (File.Exists(Parameters.FileName))
-                {
-                    // File
-                    FileNames.Add(Parameters.FileName);
-                }
-                // else it's neither a file nor a directory, doesn't exist
-            }
+            FileNamesExpanded.AddRange(Parameters.GetExpandedFileNames());
         }
 
         public string CurrentFileName
         {
             get
             {
-                if (FileNames == null || FileNames.Count == 0)
+                if (FileNamesExpanded == null || FileNamesExpanded.Count == 0)
                     return null;
-                return FileNames[CurrentFileIndex];
+                return FileNamesExpanded[CurrentFileIndex];
             }
         }
 
@@ -332,7 +323,7 @@ namespace ImagePalette
         {
             bool processed = false;
 
-            if (CurrentFileIndex < (FileNames.Count - 1))
+            if (CurrentFileIndex < (FileNamesExpanded.Count - 1))
             {
                 CurrentFileIndex++;
                 CurrentImageIsProcessed = false;
