@@ -39,9 +39,13 @@
             this.numericUpDownDistance = new System.Windows.Forms.NumericUpDown();
             this.buttonOk = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.checkBoxApplyThresholdDistance = new System.Windows.Forms.CheckBox();
             this.checkBoxApplyThresholdIndexed = new System.Windows.Forms.CheckBox();
+            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
             this.checkBoxApplyThresholdMatched = new System.Windows.Forms.CheckBox();
+            this.paletteGridMatched = new ImagePalette.PaletteGrid();
             this.buttonPrevious = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
             this.panelSpectrum = new System.Windows.Forms.Panel();
@@ -51,10 +55,6 @@
             this.labelThresholdMatched = new System.Windows.Forms.Label();
             this.numericUpDownThresholdMatched = new System.Windows.Forms.NumericUpDown();
             this.labelThresholdMatchedPercent = new System.Windows.Forms.Label();
-            this.checkBoxApplyThresholdDistance = new System.Windows.Forms.CheckBox();
-            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
-            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
-            this.paletteGridMatched = new ImagePalette.PaletteGrid();
             this.checkBoxExploreMode = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIndexed)).BeginInit();
@@ -89,6 +89,8 @@
             this.pictureBoxOriginal.TabIndex = 1;
             this.pictureBoxOriginal.TabStop = false;
             this.pictureBoxOriginal.Click += new System.EventHandler(this.pictureBoxOriginal_Click);
+            this.pictureBoxOriginal.DragDrop += new System.Windows.Forms.DragEventHandler(this.pictureBoxOriginal_DragDrop);
+            this.pictureBoxOriginal.DragOver += new System.Windows.Forms.DragEventHandler(this.pictureBoxOriginal_DragOver);
             // 
             // labelImageIndexed
             // 
@@ -192,6 +194,17 @@
             this.splitContainer1.SplitterDistance = 395;
             this.splitContainer1.TabIndex = 10;
             // 
+            // checkBoxApplyThresholdDistance
+            // 
+            this.checkBoxApplyThresholdDistance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.checkBoxApplyThresholdDistance.AutoSize = true;
+            this.checkBoxApplyThresholdDistance.Location = new System.Drawing.Point(274, -1);
+            this.checkBoxApplyThresholdDistance.Name = "checkBoxApplyThresholdDistance";
+            this.checkBoxApplyThresholdDistance.Size = new System.Drawing.Size(118, 17);
+            this.checkBoxApplyThresholdDistance.TabIndex = 3;
+            this.checkBoxApplyThresholdDistance.Text = "Distance Threshold";
+            this.checkBoxApplyThresholdDistance.UseVisualStyleBackColor = true;
+            // 
             // checkBoxApplyThresholdIndexed
             // 
             this.checkBoxApplyThresholdIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -202,6 +215,17 @@
             this.checkBoxApplyThresholdIndexed.TabIndex = 2;
             this.checkBoxApplyThresholdIndexed.Text = "Count Threshold";
             this.checkBoxApplyThresholdIndexed.UseVisualStyleBackColor = true;
+            // 
+            // paletteGridIndexed
+            // 
+            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
+            this.paletteGridIndexed.Name = "paletteGridIndexed";
+            this.paletteGridIndexed.ShowRgbaColumns = false;
+            this.paletteGridIndexed.Size = new System.Drawing.Size(389, 344);
+            this.paletteGridIndexed.TabIndex = 1;
             // 
             // splitContainer2
             // 
@@ -223,6 +247,17 @@
             this.splitContainer2.SplitterDistance = 275;
             this.splitContainer2.TabIndex = 14;
             // 
+            // paletteGridLoaded
+            // 
+            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridLoaded.Name = "paletteGridLoaded";
+            this.paletteGridLoaded.ShowRgbaColumns = false;
+            this.paletteGridLoaded.Size = new System.Drawing.Size(269, 343);
+            this.paletteGridLoaded.TabIndex = 1;
+            // 
             // checkBoxApplyThresholdMatched
             // 
             this.checkBoxApplyThresholdMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -233,6 +268,17 @@
             this.checkBoxApplyThresholdMatched.TabIndex = 2;
             this.checkBoxApplyThresholdMatched.Text = "Match Threshold";
             this.checkBoxApplyThresholdMatched.UseVisualStyleBackColor = true;
+            // 
+            // paletteGridMatched
+            // 
+            this.paletteGridMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridMatched.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridMatched.Name = "paletteGridMatched";
+            this.paletteGridMatched.ShowRgbaColumns = false;
+            this.paletteGridMatched.Size = new System.Drawing.Size(296, 343);
+            this.paletteGridMatched.TabIndex = 1;
             // 
             // buttonPrevious
             // 
@@ -327,47 +373,6 @@
             this.labelThresholdMatchedPercent.Size = new System.Drawing.Size(15, 13);
             this.labelThresholdMatchedPercent.TabIndex = 9;
             this.labelThresholdMatchedPercent.Text = "%";
-            // 
-            // checkBoxApplyThresholdDistance
-            // 
-            this.checkBoxApplyThresholdDistance.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBoxApplyThresholdDistance.AutoSize = true;
-            this.checkBoxApplyThresholdDistance.Location = new System.Drawing.Point(274, -1);
-            this.checkBoxApplyThresholdDistance.Name = "checkBoxApplyThresholdDistance";
-            this.checkBoxApplyThresholdDistance.Size = new System.Drawing.Size(118, 17);
-            this.checkBoxApplyThresholdDistance.TabIndex = 3;
-            this.checkBoxApplyThresholdDistance.Text = "Distance Threshold";
-            this.checkBoxApplyThresholdDistance.UseVisualStyleBackColor = true;
-            // 
-            // paletteGridIndexed
-            // 
-            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
-            this.paletteGridIndexed.Name = "paletteGridIndexed";
-            this.paletteGridIndexed.Size = new System.Drawing.Size(389, 344);
-            this.paletteGridIndexed.TabIndex = 1;
-            // 
-            // paletteGridLoaded
-            // 
-            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridLoaded.Name = "paletteGridLoaded";
-            this.paletteGridLoaded.Size = new System.Drawing.Size(269, 343);
-            this.paletteGridLoaded.TabIndex = 1;
-            // 
-            // paletteGridMatched
-            // 
-            this.paletteGridMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridMatched.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridMatched.Name = "paletteGridMatched";
-            this.paletteGridMatched.Size = new System.Drawing.Size(296, 343);
-            this.paletteGridMatched.TabIndex = 1;
             // 
             // checkBoxExploreMode
             // 

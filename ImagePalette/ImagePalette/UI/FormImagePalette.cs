@@ -23,7 +23,7 @@ namespace ImagePalette
         {
             // Set defaults
             parameters = new ImagePaletteParameters();
-            parameters.FileName = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\CCMG707.jpg";
+            parameters.FileNames = new List<string>(new string[] { @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\CCMG707.jpg" });
             parameters.FileNameReference = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\colors.pal";
             parameters.FileNameOutput = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\output.xml";
             parameters.Coverage = 100;
@@ -35,7 +35,7 @@ namespace ImagePalette
             // Set UI bindings
             try
             {
-                textBoxFileName.DataBindings.Add("Text", parameters, "FileName");
+                textBoxFileName.DataBindings.Add("Text", parameters, "FileNames");
                 textBoxFileNameReference.DataBindings.Add("Text", parameters, "FileNameReference");
                 numericUpDownCoverage.DataBindings.Add("Value", parameters, "Coverage");
                 numericUpDownDistance.DataBindings.Add("Value", parameters, "Distance");

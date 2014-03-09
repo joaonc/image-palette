@@ -30,15 +30,17 @@ namespace ImagePalette
             formImageOriginal = new FormImage("Original");
             formImageIndexed = new FormImage("Indexed");
 
+            // Had to downcast to Control b/c AllowDrop on PictureBox is overriden with
+            // [BrowsableAttribute(false)], not sure why, and AllowDrop is not available in PictureBox in the UI designer
+            ((Control)pictureBoxOriginal).AllowDrop = true;
+
+            // Register for events when properties are modified
+            PaletteProcessor.Parameters.PropertyChanged += new PropertyChangedEventHandler(imagePaletteParameters_PropertyChanged);
             PaletteProcessor.ImageChangedEvent += new ImageChangedHandler(paletteProcessor_OnImageChanged);
+
             SetBindings();
             UpdateUIPreviousNextButtons();
             ProcessImage();
-        }
-
-        ImagePaletteParameters Parameters
-        {
-            get { return PaletteProcessor.Parameters; }
         }
 
         private void SetBindings()
@@ -83,6 +85,17 @@ namespace ImagePalette
             {
                 MessageBox.Show(ex.Message, "Error setting bindings");
             }
+        }
+
+        protected void imagePaletteParameters_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            System.Diagnostics.Debug.Assert(object.ReferenceEquals(sender, PaletteProcessor.Parameters));
+
+            if (e.PropertyName.Equals(Util.GetMemberInfo((ImagePaletteParameters s) => s.FileNames).Name))
+            {
+                UpdateUIPreviousNextButtons();
+            }
+
         }
 
         private void ProcessImage()
@@ -164,7 +177,7 @@ namespace ImagePalette
 
         private void UpdateUIPreviousNextButtons()
         {
-            buttonNext.Enabled = PaletteProcessor.CurrentFileIndex < (PaletteProcessor.FileNames.Count -1);
+            buttonNext.Enabled = PaletteProcessor.CurrentFileIndex < (PaletteProcessor.FileNamesExpanded.Count -1);
             buttonPrevious.Enabled = PaletteProcessor.CurrentFileIndex > 0;
         }
 
@@ -186,6 +199,23 @@ namespace ImagePalette
                 location.X = (int)x;
                 Rectangle rect = new Rectangle(location, size);
                 e.Graphics.FillRectangle(brush, rect);
+            }
+        }
+
+        private void pictureBoxOriginal_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void pictureBoxOriginal_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files != null && files.Length > 0)
+            {
+                PaletteProcessor.Parameters.FileNames = new List<string>(files);
             }
         }
     }
