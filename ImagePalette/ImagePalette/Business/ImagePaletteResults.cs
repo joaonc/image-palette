@@ -7,19 +7,26 @@ namespace ImagePalette
 {
     public class ImagePaletteResults
     {
+        /// <summary>
+        /// Parameters used to create these results.
+        /// </summary>
         public ImagePaletteParameters Parameters { get; set; }
-        public DictionarySerializable<string, DictionarySerializable<ColorSerializable, int>> FileResults { get; set; }
+
+        /// <summary>
+        /// Dictionary with FileName as Key and ImagePaletteResult as Value.
+        /// </summary>
+        public DictionarySerializable<string, List<ImagePaletteResult>> FileResults { get; set; }
 
         public ImagePaletteResults()
         {
             Parameters = new ImagePaletteParameters();
-            FileResults = new DictionarySerializable<string, DictionarySerializable<ColorSerializable, int>>();
+            FileResults = new DictionarySerializable<string, List<ImagePaletteResult>>();
         }
 
         public ImagePaletteResults(ImagePaletteParameters parameters)
         {
             Parameters = parameters;
-            FileResults = new DictionarySerializable<string, DictionarySerializable<ColorSerializable, int>>();
+            FileResults = new DictionarySerializable<string, List<ImagePaletteResult>>();
         }
 
         public void Save()
