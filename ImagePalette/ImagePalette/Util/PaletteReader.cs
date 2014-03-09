@@ -45,8 +45,12 @@ namespace ImagePalette
                     case ".pal":
                         ReadPAL();
                         break;
-                    default:
+                    case ".csv":
+                    case ".txt":
+                        ReadCSV();
                         break;
+                    default:
+                        throw new NotImplementedException("Reader for the this extension not implemented: " + Path.GetExtension(FileName));
                 }
             }
 
@@ -73,7 +77,7 @@ namespace ImagePalette
         ///       0 in PAL is 255 in Color.
         ///       This conversion is done in the code.
         /// </summary>
-        void ReadPAL()
+        private void ReadPAL()
         {
             // Read the file
             FileStream fs = File.Open(fileName, FileMode.Open, FileAccess.Read);
@@ -99,6 +103,95 @@ namespace ImagePalette
             finally
             {
                 fs.Close();
+            }
+        }
+
+        private string[] RealLineIntoColumns(StreamReader sr, char delimiter)
+        {
+            string line = sr.ReadLine();
+            if (line != null)
+                return line.Split(delimiter);
+
+            return null;
+        }
+
+        private void ReadCSV()
+        {
+            char delimiter = ',';
+
+            // Read the file
+            StreamReader sr = new StreamReader(fileName);
+
+            try
+            {
+                string[] line = RealLineIntoColumns(sr, delimiter);
+                if (line == null || line.Length < 3 || line.Length > 4)
+                    throw new Exception("Either 3 (RGB) or 4 (RGBA) columns are expected in the file " + fileName);
+
+                palette = new HashSet<Color>();
+
+                // Create the column mapping for the values (0 based index)
+                Dictionary<string, int> columns = new Dictionary<string, int>();
+
+                int i;
+                if (!Int32.TryParse(line[0], out i))
+                {
+                    // Check if the first line has columns
+                    // If it's not a number, then it's assumed the first line has the column names defined
+                    for (i = line.Length - 1; i >= 0; i--)
+                    {
+                        switch (line[i].ToLower())
+                        {
+                            case "r":
+                            case "red":
+                                columns["R"] = i;
+                                break;
+                            case "g":
+                            case "green":
+                                columns["G"] = i;
+                                break;
+                            case "b":
+                            case "blue":
+                                columns["B"] = i;
+                                break;
+                            case "a":
+                            case "alplha":
+                                columns["A"] = i;
+                                break;
+                            default:
+                                throw new Exception(string.Format("Unknow column {0} in file {1}.", line[i], fileName));
+                        }
+                    }
+
+                    // Read new line
+                    line = RealLineIntoColumns(sr, delimiter);
+                }
+                else
+                {
+                    // Default column mapping
+                    columns["R"] = 0;
+                    columns["G"] = 1;
+                    columns["B"] = 2;
+                    if (line.Length == 4)
+                        columns["A"] = 3;
+                }
+
+                while (line != null)
+                {
+                    Color color = Color.FromArgb(
+                        Convert.ToByte(line[columns["R"]]), Convert.ToByte(line[columns["G"]]), Convert.ToByte(line[columns["B"]]));
+                    if (line.Length == 4)
+                        color = Color.FromArgb(Convert.ToByte(line[columns["A"]]), color);
+
+                    palette.Add(color);
+
+                    line = RealLineIntoColumns(sr, delimiter);
+                }
+
+            }
+            finally
+            {
+                sr.Close();
             }
         }
     }

@@ -347,6 +347,21 @@ namespace ImagePalette
             return processed;
         }
 
+        public void ProcessAll()
+        {
+            if (CurrentFileIndex != 0)
+            {
+                // Start from beginning
+                CurrentFileIndex = 0;
+                CurrentImageIsProcessed = false;
+                ProcessCurrent();
+            }
+            else if (!CurrentImageIsProcessed)
+                ProcessCurrent();
+
+            while (ProcessNext()) ;
+        }
+
         /// <summary>
         /// Gets the table with the indexed colors that pass the given threshold of number of colors from the indexed image.
         /// </summary>
