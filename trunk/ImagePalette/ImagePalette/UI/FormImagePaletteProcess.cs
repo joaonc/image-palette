@@ -123,7 +123,13 @@ namespace ImagePalette
 
         private void buttonOk_Click(object sender, EventArgs e)
         {
+            PaletteProcessor.ProcessAll();
             PaletteProcessor.Results.Save();
+            Close();
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
             Close();
         }
 
@@ -177,7 +183,7 @@ namespace ImagePalette
 
         private void UpdateUIPreviousNextButtons()
         {
-            buttonNext.Enabled = PaletteProcessor.CurrentFileIndex < (PaletteProcessor.FileNamesExpanded.Count -1);
+            buttonNext.Enabled = PaletteProcessor.CurrentFileIndex < (PaletteProcessor.FileNamesExpanded.Count - 1);
             buttonPrevious.Enabled = PaletteProcessor.CurrentFileIndex > 0;
         }
 

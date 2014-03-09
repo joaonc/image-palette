@@ -56,6 +56,7 @@
             this.numericUpDownThresholdMatched = new System.Windows.Forms.NumericUpDown();
             this.labelThresholdMatchedPercent = new System.Windows.Forms.Label();
             this.checkBoxExploreMode = new System.Windows.Forms.CheckBox();
+            this.buttonCancel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIndexed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDistance)).BeginInit();
@@ -164,7 +165,7 @@
             // buttonOk
             // 
             this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(1110, 410);
+            this.buttonOk.Location = new System.Drawing.Point(1110, 414);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 13;
@@ -283,7 +284,7 @@
             // buttonPrevious
             // 
             this.buttonPrevious.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonPrevious.Location = new System.Drawing.Point(913, 410);
+            this.buttonPrevious.Location = new System.Drawing.Point(1029, 385);
             this.buttonPrevious.Name = "buttonPrevious";
             this.buttonPrevious.Size = new System.Drawing.Size(75, 23);
             this.buttonPrevious.TabIndex = 11;
@@ -294,7 +295,7 @@
             // buttonNext
             // 
             this.buttonNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNext.Location = new System.Drawing.Point(994, 410);
+            this.buttonNext.Location = new System.Drawing.Point(1110, 385);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(75, 23);
             this.buttonNext.TabIndex = 12;
@@ -385,11 +386,26 @@
             this.checkBoxExploreMode.Text = "Explore Mode";
             this.checkBoxExploreMode.UseVisualStyleBackColor = true;
             // 
+            // buttonCancel
+            // 
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonCancel.Location = new System.Drawing.Point(1029, 414);
+            this.buttonCancel.Name = "buttonCancel";
+            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.TabIndex = 16;
+            this.buttonCancel.Text = "Cancel";
+            this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
+            // 
             // FormImagePaletteProcess
             // 
+            this.AcceptButton = this.buttonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(1197, 445);
+            this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.checkBoxExploreMode);
             this.Controls.Add(this.labelThresholdMatchedPercent);
             this.Controls.Add(this.numericUpDownThresholdMatched);
@@ -465,5 +481,6 @@
         private System.Windows.Forms.CheckBox checkBoxApplyThresholdMatched;
         private System.Windows.Forms.CheckBox checkBoxApplyThresholdDistance;
         private System.Windows.Forms.CheckBox checkBoxExploreMode;
+        private System.Windows.Forms.Button buttonCancel;
     }
 }
