@@ -53,6 +53,7 @@
       <DependentUpon>SpectrumPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Util\ColorSerializable.cs" />
+    <Compile Include="Util\ColorUtil.cs" />
     <Compile Include="Util\DictionarySerializable.cs" />
     <Compile Include="Business\ImagePaletteResults.cs" />
     <Compile Include="UI\FormImage.cs">
