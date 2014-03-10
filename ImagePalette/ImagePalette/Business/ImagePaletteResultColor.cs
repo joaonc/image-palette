@@ -4,19 +4,25 @@ using System.Xml.Serialization;
 
 namespace ImagePalette
 {
-    public class ImagePaletteResult
+    public class ImagePaletteResultColor
     {
+        /// <summary>
+        /// The color in the image.
+        /// </summary>
         [XmlElement(Type = typeof(ColorSerializable))]
         public Color Color { get; set; }
 
+        /// <summary>
+        /// The number of times a given color appears in an image.
+        /// </summary>
         public int Count { get; set; }
 
-        public ImagePaletteResult()
+        public ImagePaletteResultColor()
         {
             Color = Color.Empty;
         }
 
-        public ImagePaletteResult(Color color, int count)
+        public ImagePaletteResultColor(Color color, int count)
         {
             Color = color;
             Count = count;

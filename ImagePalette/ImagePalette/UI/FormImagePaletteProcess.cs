@@ -48,6 +48,10 @@ namespace ImagePalette
             // Set bindings between the UI and variables
             try
             {
+                numericUpDownCoverage.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
+                numericUpDownCoverage.DataBindings.Add("Value", PaletteProcessor.Parameters,
+                    Util.GetMemberInfo((ImagePaletteParameters s) => s.Coverage).Name);
+
                 numericUpDownDistance.DataBindings.DefaultDataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged;
                 numericUpDownDistance.DataBindings.Add("Value", PaletteProcessor.Parameters,
                     Util.GetMemberInfo((ImagePaletteParameters s) => s.Distance).Name);
