@@ -24,7 +24,7 @@ namespace ImagePalette
             // Set defaults
             parameters = new ImagePaletteParameters();
             parameters.FileNames = new List<string>(new string[] { @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\CCMG707.jpg" });
-            parameters.FileNameReference = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\colors.pal";
+            parameters.FileNameReference = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\colors-blog-cr.csv";
             parameters.FileNameOutput = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\output.xml";
             parameters.Coverage = 100;
             parameters.Distance = 1000;

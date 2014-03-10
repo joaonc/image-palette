@@ -46,6 +46,12 @@
   <ItemGroup>
     <Compile Include="Business\ImagePaletteResult.cs" />
     <Compile Include="Business\ImagePaletteResultColor.cs" />
+    <Compile Include="UI\SpectrumPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\SpectrumPanel.Designer.cs">
+      <DependentUpon>SpectrumPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Util\ColorSerializable.cs" />
     <Compile Include="Util\DictionarySerializable.cs" />
     <Compile Include="Business\ImagePaletteResults.cs" />
@@ -101,6 +107,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\SpectrumPanel.resx">
+      <DependentUpon>SpectrumPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

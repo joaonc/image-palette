@@ -191,27 +191,6 @@ namespace ImagePalette
             buttonPrevious.Enabled = PaletteProcessor.CurrentFileIndex > 0;
         }
 
-        private void panelSpectrum_Paint(object sender, PaintEventArgs e)
-        {
-            // Create the color spectrum.
-            // From http://stackoverflow.com/questions/2288498/how-do-i-get-a-rainbow-color-gradient-in-c
-            
-            int numColors = 100;
-            double colorIncrease = (double)1/(double)numColors;
-            double posIncrease = (double)e.ClipRectangle.Width/ (double)numColors;
-            Size size = new Size(Convert.ToInt16(Math.Ceiling(posIncrease)), e.ClipRectangle.Height);
-            Point location = new Point(0, 0);
-            for (double i = 0, x = 0; i < 1; i += colorIncrease, x += posIncrease)
-            {
-                Color color = ImagePaletteProcess.HSL2RGB(i, 0.5, 0.5);
-                SolidBrush brush = new SolidBrush(color);
-
-                location.X = (int)x;
-                Rectangle rect = new Rectangle(location, size);
-                e.Graphics.FillRectangle(brush, rect);
-            }
-        }
-
         private void pictureBoxOriginal_DragOver(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
