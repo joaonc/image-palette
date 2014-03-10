@@ -41,7 +41,7 @@ namespace ImagePalette
         /// The actual number of pixels that were processed from the image.
         /// Depends on the parameter Coverage.
         /// </summary>
-        public long CurrentActualCoverage { get; private set; }
+        public long CurrentPixelsCovered { get; private set; }
 
 
         public ImagePaletteResults Results { get; private set; }
@@ -309,9 +309,11 @@ namespace ImagePalette
                 CalculateMatchedColors(forceReprocess);
 
                 // Update results
-                List<ImagePaletteResultColor> fileResult = new List<ImagePaletteResultColor>(DataTableMatched.DefaultView.Count);
+                ImagePaletteResult fileResult = new ImagePaletteResult(DataTableMatched.DefaultView.Count);
+                fileResult.Pixels = CurrentImageOriginal.Height * CurrentImageOriginal.Width;
+                fileResult.PixelsCovered = CurrentPixelsCovered;
                 foreach (DataRowView row in DataTableMatched.DefaultView)
-                    fileResult.Add(new ImagePaletteResultColor((Color)row[PaletteGridColumns.Color], (int)row[PaletteGridColumns.Count]));
+                    fileResult.ColorCountList.Add(new ImagePaletteResultColor((Color)row[PaletteGridColumns.Color], (int)row[PaletteGridColumns.Count]));
                 Results.FileResults[CurrentFileName] = fileResult;
 
                 // Set processed flags
@@ -404,11 +406,17 @@ namespace ImagePalette
                 // Hashtable has faster operation than DataTable
                 Bitmap image = (Bitmap)CurrentImageIndexed;
                 Hashtable indexedFromImage = new Hashtable();
-                int totalPixels = 0;
+                CurrentPixelsCovered = 0;
 
-                for (int x = 0; x < image.Width; x++)
+                // Variable increase is int instead of double for performance reasons
+                // Less precision on the coverage of actual number of pixels
+                // but trade-off for speed is worth it which is the point of the Coverage parameter
+                // 100 for percentage (inverse) and sqrt to split the increase between x and y
+                int increase = Convert.ToInt32(Math.Sqrt(100d / (double)Parameters.Coverage));
+
+                for (int x = image.Width - 1; x >= 0; x -= increase)
                 {
-                    for (int y = 0; y < image.Height; y++)
+                    for (int y = image.Height - 1; y >= 0; y -= increase)
                     {
                         Color color = image.GetPixel(x, y);
                         if (indexedFromImage[color] == null)
@@ -416,7 +424,7 @@ namespace ImagePalette
                         else
                             indexedFromImage[color] = (int)indexedFromImage[color] + 1;
 
-                        totalPixels++;
+                        CurrentPixelsCovered++;
                     }
                 }
 
@@ -430,7 +438,7 @@ namespace ImagePalette
                     DataRow row = DataTableIndexed.NewRow();
                     row[PaletteGridColumns.Color] = color;
                     row[PaletteGridColumns.Count] = count;
-                    row[PaletteGridColumns.Percentage] = (double)(count * 100) / (double)totalPixels;
+                    row[PaletteGridColumns.Percentage] = (double)(count * 100) / (double)CurrentPixelsCovered;
 
                     DataTableIndexed.Rows.Add(row);
                 }
@@ -516,18 +524,21 @@ namespace ImagePalette
                 // Build the table with the matched colors
                 DataTableMatched.Rows.Clear();
                 Color currentColor = Color.White;  // Any color since it's a non nullable object
+                ulong totalColorCount = 0;
                 DataRow matchedRow = null;
                 foreach (DataRowView drvIndexed in dvIndexed)
                 {
                     DataRow rowIndexed = drvIndexed.Row;
                     Color newColor = (Color)rowIndexed[PaletteGridColumns.Match];
+                    int colorCount = (int)rowIndexed[PaletteGridColumns.Count];
 
                     if (matchedRow == null || !newColor.Equals(currentColor))
                     {
                         currentColor = (Color)rowIndexed[PaletteGridColumns.Match];
+
                         matchedRow = DataTableMatched.NewRow();
                         matchedRow[PaletteGridColumns.Color] = currentColor;
-                        matchedRow[PaletteGridColumns.Count] = (int)rowIndexed[PaletteGridColumns.Count];
+                        matchedRow[PaletteGridColumns.Count] = colorCount;
 
                         DataTableMatched.Rows.Add(matchedRow);
                         currentColor = newColor;
@@ -535,9 +546,16 @@ namespace ImagePalette
                     else
                     {
                         matchedRow[PaletteGridColumns.Count] =
-                            (int)matchedRow[PaletteGridColumns.Count] + (int)rowIndexed[PaletteGridColumns.Count];
+                            (int)matchedRow[PaletteGridColumns.Count] + colorCount;
                     }
+
+                    totalColorCount += Convert.ToUInt64(colorCount);
                 }
+
+                // Calculate percentages. Filtering by Matched threshold doesn't alter them.
+                foreach (DataRow rowMatched in DataTableMatched.Rows)
+                    rowMatched[PaletteGridColumns.Percentage] = 
+                        (Convert.ToDouble((int)rowMatched[PaletteGridColumns.Count]) * 100d) / Convert.ToDouble(totalColorCount);
 
                 string filterMatched = applyThresholdMatched ? string.Format("[{0}] < {1}", PaletteGridColumns.Count, Parameters.ThresholdMatched) : null;
 
