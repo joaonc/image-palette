@@ -167,9 +167,10 @@ namespace ImagePalette
 
         private void FormImagePaletteProcess_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (formImageOriginal.Visible)
+            if (formImageOriginal!= null && formImageOriginal.Visible)
                 formImageOriginal.Close();
-            if (formImageIndexed.Visible)
+
+            if (formImageIndexed != null && formImageIndexed.Visible)
                 formImageIndexed.Close();
         }
 

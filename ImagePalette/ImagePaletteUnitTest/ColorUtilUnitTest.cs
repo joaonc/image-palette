@@ -7,7 +7,7 @@ using ImagePalette;
 namespace ImagePaletteUnitTest
 {
     [TestClass]
-    public class ImagePaletteProcessUnitTest
+    public class ColorUtilUnitTest
     {
         private Dictionary<Tuple<Color, Color>, double> knownDistances;
 
@@ -23,7 +23,7 @@ namespace ImagePaletteUnitTest
         {
             foreach (Tuple<Color, Color> colorTuple in knownDistances.Keys)
             {
-                double distance = ImagePaletteProcess.ColorDistance(colorTuple.Item1, colorTuple.Item2);
+                double distance = ColorUtil.ColorDistance(colorTuple.Item1, colorTuple.Item2);
                 Assert.AreEqual(knownDistances[colorTuple], distance, 0.01d);
             }
         }
@@ -40,7 +40,7 @@ namespace ImagePaletteUnitTest
                 Color c1 = Color.FromArgb(random.Next(0, 127), colorTuple.Item1.R, colorTuple.Item1.G, colorTuple.Item1.B);
                 Color c2 = Color.FromArgb(random.Next(128, 255), colorTuple.Item2.R, colorTuple.Item2.G, colorTuple.Item2.B);
 
-                double distance = ImagePaletteProcess.ColorDistance(c1, c2);
+                double distance = ColorUtil.ColorDistance(c1, c2);
                 Assert.AreEqual(knownDistances[colorTuple], distance, 0.01d);
             }
         }
@@ -53,7 +53,7 @@ namespace ImagePaletteUnitTest
         {
             foreach (Tuple<Color, Color> colorTuple in knownDistances.Keys)
             {
-                double distance = ImagePaletteProcess.ColorDistance(colorTuple.Item2, colorTuple.Item1);
+                double distance = ColorUtil.ColorDistance(colorTuple.Item2, colorTuple.Item1);
                 Assert.AreEqual(knownDistances[colorTuple], distance, 0.01d);
             }
         }
