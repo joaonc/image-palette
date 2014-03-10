@@ -45,7 +45,6 @@
             this.checkBoxApplyThresholdMatched = new System.Windows.Forms.CheckBox();
             this.buttonPrevious = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
-            this.panelSpectrum = new System.Windows.Forms.Panel();
             this.labelThresholdIndexed = new System.Windows.Forms.Label();
             this.numericUpDownThresholdIndexed = new System.Windows.Forms.NumericUpDown();
             this.labelThresholdIndexedPercent = new System.Windows.Forms.Label();
@@ -54,12 +53,13 @@
             this.labelThresholdMatchedPercent = new System.Windows.Forms.Label();
             this.checkBoxExploreMode = new System.Windows.Forms.CheckBox();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
-            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
-            this.paletteGridMatched = new ImagePalette.PaletteGrid();
             this.labelCoverage = new System.Windows.Forms.Label();
             this.numericUpDownCoverage = new System.Windows.Forms.NumericUpDown();
             this.labelCoveragePercentage = new System.Windows.Forms.Label();
+            this.spectrumPanel = new ImagePalette.UI.SpectrumPanel();
+            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
+            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
+            this.paletteGridMatched = new ImagePalette.PaletteGrid();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIndexed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDistance)).BeginInit();
@@ -274,16 +274,6 @@
             this.buttonNext.UseVisualStyleBackColor = true;
             this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
             // 
-            // panelSpectrum
-            // 
-            this.panelSpectrum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelSpectrum.Location = new System.Drawing.Point(228, 418);
-            this.panelSpectrum.Name = "panelSpectrum";
-            this.panelSpectrum.Size = new System.Drawing.Size(553, 36);
-            this.panelSpectrum.TabIndex = 14;
-            this.panelSpectrum.Paint += new System.Windows.Forms.PaintEventHandler(this.panelSpectrum_Paint);
-            // 
             // labelThresholdIndexed
             // 
             this.labelThresholdIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -369,39 +359,6 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
-            // paletteGridIndexed
-            // 
-            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
-            this.paletteGridIndexed.Name = "paletteGridIndexed";
-            this.paletteGridIndexed.ShowRgbaColumns = false;
-            this.paletteGridIndexed.Size = new System.Drawing.Size(389, 368);
-            this.paletteGridIndexed.TabIndex = 1;
-            // 
-            // paletteGridLoaded
-            // 
-            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridLoaded.Name = "paletteGridLoaded";
-            this.paletteGridLoaded.ShowRgbaColumns = false;
-            this.paletteGridLoaded.Size = new System.Drawing.Size(269, 367);
-            this.paletteGridLoaded.TabIndex = 1;
-            // 
-            // paletteGridMatched
-            // 
-            this.paletteGridMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridMatched.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridMatched.Name = "paletteGridMatched";
-            this.paletteGridMatched.ShowRgbaColumns = false;
-            this.paletteGridMatched.Size = new System.Drawing.Size(296, 367);
-            this.paletteGridMatched.TabIndex = 1;
-            // 
             // labelCoverage
             // 
             this.labelCoverage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -440,6 +397,48 @@
             this.labelCoveragePercentage.TabIndex = 19;
             this.labelCoveragePercentage.Text = "%";
             // 
+            // spectrumPanel
+            // 
+            this.spectrumPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.spectrumPanel.Location = new System.Drawing.Point(228, 406);
+            this.spectrumPanel.Name = "spectrumPanel";
+            this.spectrumPanel.Size = new System.Drawing.Size(553, 55);
+            this.spectrumPanel.TabIndex = 20;
+            // 
+            // paletteGridIndexed
+            // 
+            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
+            this.paletteGridIndexed.Name = "paletteGridIndexed";
+            this.paletteGridIndexed.ShowRgbaColumns = false;
+            this.paletteGridIndexed.Size = new System.Drawing.Size(389, 368);
+            this.paletteGridIndexed.TabIndex = 1;
+            // 
+            // paletteGridLoaded
+            // 
+            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridLoaded.Name = "paletteGridLoaded";
+            this.paletteGridLoaded.ShowRgbaColumns = false;
+            this.paletteGridLoaded.Size = new System.Drawing.Size(269, 367);
+            this.paletteGridLoaded.TabIndex = 1;
+            // 
+            // paletteGridMatched
+            // 
+            this.paletteGridMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridMatched.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridMatched.Name = "paletteGridMatched";
+            this.paletteGridMatched.ShowRgbaColumns = false;
+            this.paletteGridMatched.Size = new System.Drawing.Size(296, 367);
+            this.paletteGridMatched.TabIndex = 1;
+            // 
             // FormImagePaletteProcess
             // 
             this.AcceptButton = this.buttonOk;
@@ -447,6 +446,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(1197, 469);
+            this.Controls.Add(this.spectrumPanel);
             this.Controls.Add(this.labelCoveragePercentage);
             this.Controls.Add(this.numericUpDownCoverage);
             this.Controls.Add(this.labelCoverage);
@@ -458,7 +458,6 @@
             this.Controls.Add(this.labelThresholdIndexedPercent);
             this.Controls.Add(this.numericUpDownThresholdIndexed);
             this.Controls.Add(this.labelThresholdIndexed);
-            this.Controls.Add(this.panelSpectrum);
             this.Controls.Add(this.buttonNext);
             this.Controls.Add(this.buttonPrevious);
             this.Controls.Add(this.splitContainer1);
@@ -513,7 +512,6 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Button buttonPrevious;
         private System.Windows.Forms.Button buttonNext;
-        private System.Windows.Forms.Panel panelSpectrum;
         private PaletteGrid paletteGridIndexed;
         private PaletteGrid paletteGridLoaded;
         private PaletteGrid paletteGridMatched;
@@ -531,5 +529,6 @@
         private System.Windows.Forms.Label labelCoverage;
         private System.Windows.Forms.NumericUpDown numericUpDownCoverage;
         private System.Windows.Forms.Label labelCoveragePercentage;
+        private UI.SpectrumPanel spectrumPanel;
     }
 }

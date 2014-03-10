@@ -123,7 +123,7 @@ namespace ImagePalette
                 }
                 else if (col.Name.Equals(PaletteGridColumns.Percentage))
                 {
-                    col.Width = 30;
+                    col.Width = 40;
                     col.DefaultCellStyle.Format = "0.00";
                 }
                 else
