@@ -41,11 +41,8 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.checkBoxApplyThresholdDistance = new System.Windows.Forms.CheckBox();
             this.checkBoxApplyThresholdIndexed = new System.Windows.Forms.CheckBox();
-            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
             this.checkBoxApplyThresholdMatched = new System.Windows.Forms.CheckBox();
-            this.paletteGridMatched = new ImagePalette.PaletteGrid();
             this.buttonPrevious = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
             this.panelSpectrum = new System.Windows.Forms.Panel();
@@ -57,6 +54,12 @@
             this.labelThresholdMatchedPercent = new System.Windows.Forms.Label();
             this.checkBoxExploreMode = new System.Windows.Forms.CheckBox();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.paletteGridIndexed = new ImagePalette.PaletteGrid();
+            this.paletteGridLoaded = new ImagePalette.PaletteGrid();
+            this.paletteGridMatched = new ImagePalette.PaletteGrid();
+            this.labelCoverage = new System.Windows.Forms.Label();
+            this.numericUpDownCoverage = new System.Windows.Forms.NumericUpDown();
+            this.labelCoveragePercentage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxOriginal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIndexed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDistance)).BeginInit();
@@ -70,6 +73,7 @@
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdMatched)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCoverage)).BeginInit();
             this.SuspendLayout();
             // 
             // labelImageOriginal
@@ -165,7 +169,7 @@
             // buttonOk
             // 
             this.buttonOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOk.Location = new System.Drawing.Point(1110, 414);
+            this.buttonOk.Location = new System.Drawing.Point(1110, 438);
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(75, 23);
             this.buttonOk.TabIndex = 13;
@@ -191,7 +195,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(980, 363);
+            this.splitContainer1.Size = new System.Drawing.Size(980, 387);
             this.splitContainer1.SplitterDistance = 395;
             this.splitContainer1.TabIndex = 10;
             // 
@@ -217,17 +221,6 @@
             this.checkBoxApplyThresholdIndexed.Text = "Count Threshold";
             this.checkBoxApplyThresholdIndexed.UseVisualStyleBackColor = true;
             // 
-            // paletteGridIndexed
-            // 
-            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
-            this.paletteGridIndexed.Name = "paletteGridIndexed";
-            this.paletteGridIndexed.ShowRgbaColumns = false;
-            this.paletteGridIndexed.Size = new System.Drawing.Size(389, 344);
-            this.paletteGridIndexed.TabIndex = 1;
-            // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -244,20 +237,9 @@
             this.splitContainer2.Panel2.Controls.Add(this.checkBoxApplyThresholdMatched);
             this.splitContainer2.Panel2.Controls.Add(this.labelMatchedByDistance);
             this.splitContainer2.Panel2.Controls.Add(this.paletteGridMatched);
-            this.splitContainer2.Size = new System.Drawing.Size(581, 363);
+            this.splitContainer2.Size = new System.Drawing.Size(581, 387);
             this.splitContainer2.SplitterDistance = 275;
             this.splitContainer2.TabIndex = 14;
-            // 
-            // paletteGridLoaded
-            // 
-            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridLoaded.Name = "paletteGridLoaded";
-            this.paletteGridLoaded.ShowRgbaColumns = false;
-            this.paletteGridLoaded.Size = new System.Drawing.Size(269, 343);
-            this.paletteGridLoaded.TabIndex = 1;
             // 
             // checkBoxApplyThresholdMatched
             // 
@@ -270,21 +252,10 @@
             this.checkBoxApplyThresholdMatched.Text = "Match Threshold";
             this.checkBoxApplyThresholdMatched.UseVisualStyleBackColor = true;
             // 
-            // paletteGridMatched
-            // 
-            this.paletteGridMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.paletteGridMatched.Location = new System.Drawing.Point(3, 17);
-            this.paletteGridMatched.Name = "paletteGridMatched";
-            this.paletteGridMatched.ShowRgbaColumns = false;
-            this.paletteGridMatched.Size = new System.Drawing.Size(296, 343);
-            this.paletteGridMatched.TabIndex = 1;
-            // 
             // buttonPrevious
             // 
             this.buttonPrevious.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonPrevious.Location = new System.Drawing.Point(1029, 385);
+            this.buttonPrevious.Location = new System.Drawing.Point(1029, 409);
             this.buttonPrevious.Name = "buttonPrevious";
             this.buttonPrevious.Size = new System.Drawing.Size(75, 23);
             this.buttonPrevious.TabIndex = 11;
@@ -295,7 +266,7 @@
             // buttonNext
             // 
             this.buttonNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonNext.Location = new System.Drawing.Point(1110, 385);
+            this.buttonNext.Location = new System.Drawing.Point(1110, 409);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(75, 23);
             this.buttonNext.TabIndex = 12;
@@ -307,7 +278,7 @@
             // 
             this.panelSpectrum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelSpectrum.Location = new System.Drawing.Point(228, 394);
+            this.panelSpectrum.Location = new System.Drawing.Point(228, 418);
             this.panelSpectrum.Name = "panelSpectrum";
             this.panelSpectrum.Size = new System.Drawing.Size(553, 36);
             this.panelSpectrum.TabIndex = 14;
@@ -379,7 +350,7 @@
             // 
             this.checkBoxExploreMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxExploreMode.AutoSize = true;
-            this.checkBoxExploreMode.Location = new System.Drawing.Point(787, 386);
+            this.checkBoxExploreMode.Location = new System.Drawing.Point(787, 410);
             this.checkBoxExploreMode.Name = "checkBoxExploreMode";
             this.checkBoxExploreMode.Size = new System.Drawing.Size(91, 17);
             this.checkBoxExploreMode.TabIndex = 15;
@@ -390,7 +361,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(1029, 414);
+            this.buttonCancel.Location = new System.Drawing.Point(1029, 438);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 16;
@@ -398,13 +369,87 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // paletteGridIndexed
+            // 
+            this.paletteGridIndexed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridIndexed.Location = new System.Drawing.Point(3, 16);
+            this.paletteGridIndexed.Name = "paletteGridIndexed";
+            this.paletteGridIndexed.ShowRgbaColumns = false;
+            this.paletteGridIndexed.Size = new System.Drawing.Size(389, 368);
+            this.paletteGridIndexed.TabIndex = 1;
+            // 
+            // paletteGridLoaded
+            // 
+            this.paletteGridLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridLoaded.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridLoaded.Name = "paletteGridLoaded";
+            this.paletteGridLoaded.ShowRgbaColumns = false;
+            this.paletteGridLoaded.Size = new System.Drawing.Size(269, 367);
+            this.paletteGridLoaded.TabIndex = 1;
+            // 
+            // paletteGridMatched
+            // 
+            this.paletteGridMatched.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.paletteGridMatched.Location = new System.Drawing.Point(3, 17);
+            this.paletteGridMatched.Name = "paletteGridMatched";
+            this.paletteGridMatched.ShowRgbaColumns = false;
+            this.paletteGridMatched.Size = new System.Drawing.Size(296, 367);
+            this.paletteGridMatched.TabIndex = 1;
+            // 
+            // labelCoverage
+            // 
+            this.labelCoverage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCoverage.AutoSize = true;
+            this.labelCoverage.Location = new System.Drawing.Point(10, 441);
+            this.labelCoverage.Name = "labelCoverage";
+            this.labelCoverage.Size = new System.Drawing.Size(53, 13);
+            this.labelCoverage.TabIndex = 17;
+            this.labelCoverage.Text = "Coverage";
+            // 
+            // numericUpDownCoverage
+            // 
+            this.numericUpDownCoverage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numericUpDownCoverage.Location = new System.Drawing.Point(113, 439);
+            this.numericUpDownCoverage.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownCoverage.Name = "numericUpDownCoverage";
+            this.numericUpDownCoverage.Size = new System.Drawing.Size(63, 20);
+            this.numericUpDownCoverage.TabIndex = 18;
+            this.numericUpDownCoverage.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // labelCoveragePercentage
+            // 
+            this.labelCoveragePercentage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelCoveragePercentage.AutoSize = true;
+            this.labelCoveragePercentage.Location = new System.Drawing.Point(180, 441);
+            this.labelCoveragePercentage.Name = "labelCoveragePercentage";
+            this.labelCoveragePercentage.Size = new System.Drawing.Size(15, 13);
+            this.labelCoveragePercentage.TabIndex = 19;
+            this.labelCoveragePercentage.Text = "%";
+            // 
             // FormImagePaletteProcess
             // 
             this.AcceptButton = this.buttonOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(1197, 445);
+            this.ClientSize = new System.Drawing.Size(1197, 469);
+            this.Controls.Add(this.labelCoveragePercentage);
+            this.Controls.Add(this.numericUpDownCoverage);
+            this.Controls.Add(this.labelCoverage);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.checkBoxExploreMode);
             this.Controls.Add(this.labelThresholdMatchedPercent);
@@ -446,6 +491,7 @@
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdMatched)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCoverage)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -482,5 +528,8 @@
         private System.Windows.Forms.CheckBox checkBoxApplyThresholdDistance;
         private System.Windows.Forms.CheckBox checkBoxExploreMode;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Label labelCoverage;
+        private System.Windows.Forms.NumericUpDown numericUpDownCoverage;
+        private System.Windows.Forms.Label labelCoveragePercentage;
     }
 }

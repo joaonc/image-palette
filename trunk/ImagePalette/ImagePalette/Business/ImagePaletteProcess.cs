@@ -37,6 +37,13 @@ namespace ImagePalette
         public Image CurrentImageOriginal { get; private set; }
         public Image CurrentImageIndexed { get; private set; }
 
+        /// <summary>
+        /// The actual number of pixels that were processed from the image.
+        /// Depends on the parameter Coverage.
+        /// </summary>
+        public long CurrentActualCoverage { get; private set; }
+
+
         public ImagePaletteResults Results { get; private set; }
 
         // Events raised in this class
@@ -302,9 +309,9 @@ namespace ImagePalette
                 CalculateMatchedColors(forceReprocess);
 
                 // Update results
-                List<ImagePaletteResult> fileResult = new List<ImagePaletteResult>(DataTableMatched.DefaultView.Count);
+                List<ImagePaletteResultColor> fileResult = new List<ImagePaletteResultColor>(DataTableMatched.DefaultView.Count);
                 foreach (DataRowView row in DataTableMatched.DefaultView)
-                    fileResult.Add(new ImagePaletteResult((Color)row[PaletteGridColumns.Color], (int)row[PaletteGridColumns.Count]));
+                    fileResult.Add(new ImagePaletteResultColor((Color)row[PaletteGridColumns.Color], (int)row[PaletteGridColumns.Count]));
                 Results.FileResults[CurrentFileName] = fileResult;
 
                 // Set processed flags

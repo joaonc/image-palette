@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\ImagePaletteResult.cs" />
+    <Compile Include="Business\ImagePaletteResultColor.cs" />
     <Compile Include="Util\ColorSerializable.cs" />
     <Compile Include="Util\DictionarySerializable.cs" />
     <Compile Include="Business\ImagePaletteResults.cs" />

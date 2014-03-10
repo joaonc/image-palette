@@ -15,18 +15,18 @@ namespace ImagePalette
         /// <summary>
         /// Dictionary with FileName as Key and ImagePaletteResult as Value.
         /// </summary>
-        public DictionarySerializable<string, List<ImagePaletteResult>> FileResults { get; set; }
+        public DictionarySerializable<string, List<ImagePaletteResultColor>> FileResults { get; set; }
 
         public ImagePaletteResults()
         {
             Parameters = new ImagePaletteParameters();
-            FileResults = new DictionarySerializable<string, List<ImagePaletteResult>>();
+            FileResults = new DictionarySerializable<string, List<ImagePaletteResultColor>>();
         }
 
         public ImagePaletteResults(ImagePaletteParameters parameters)
         {
             Parameters = parameters;
-            FileResults = new DictionarySerializable<string, List<ImagePaletteResult>>();
+            FileResults = new DictionarySerializable<string, List<ImagePaletteResultColor>>();
         }
 
         public void Save()
