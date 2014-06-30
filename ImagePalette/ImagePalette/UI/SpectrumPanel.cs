@@ -10,7 +10,12 @@ namespace ImagePalette.UI
     {
         private DataGridView dgvIndexed;
         private ImagePaletteParameters parameters;
-        Graphics graphics;
+        private Graphics graphicsSpectrum;
+
+        /// <summary>
+        /// Key = Indexed color, Value = Matched color
+        /// </summary>
+        private Dictionary<Color, Color> matchedColors;
 
         public SpectrumPanel()
         {
@@ -19,6 +24,7 @@ namespace ImagePalette.UI
 
         private void SpectrumPanel_Load(object sender, EventArgs e)
         {
+            matchedColors = new Dictionary<Color, Color>();
             PaintPanel();
         }
 
@@ -32,13 +38,16 @@ namespace ImagePalette.UI
             this.dgvIndexed = dgvIndexed;
             this.parameters = parameters;
 
+            CreateMatchedColors();
             PaintPanel();
         }
 
         private void PaintPanel()
         {
             PaintSpectrum();
-            PaintIndexed();
+
+            if (matchedColors.Count > 0)
+                PaintMatchedColors();
         }
 
         private void PaintSpectrum()
@@ -51,7 +60,7 @@ namespace ImagePalette.UI
             double posIncrease = (double)panel.Width / (double)numColors;
             Size size = new Size(Convert.ToInt16(Math.Ceiling(posIncrease)), panel.Height);
             Point location = new Point(0, 0);
-            graphics = panel.CreateGraphics();
+            graphicsSpectrum = panel.CreateGraphics();
 
             for (double i = 0, x = 0; i < 1; i += colorIncrease, x += posIncrease)
             {
@@ -61,19 +70,28 @@ namespace ImagePalette.UI
                 location.X = (int)x;
                 Rectangle rect = new Rectangle(location, size);
                 
-                graphics.FillRectangle(brush, rect);
+                graphicsSpectrum.FillRectangle(brush, rect);
             }
         }
 
-        private void PaintIndexed()
+        private void CreateMatchedColors()
         {
             if (dgvIndexed != null)
             {
+                matchedColors.Clear();
                 foreach (DataRowView row in dgvIndexed.Rows)
-                {
-
-                }
+                    matchedColors.Add((Color)row[PaletteGridColumns.Color], (Color)row[PaletteGridColumns.Match]);
             }
+        }
+
+        private void PaintCircle(Graphics g, Point position)
+        {
+        }
+
+        private void PaintMatchedColors()
+        {
+            //TODO: finish
+            //foreach (Color indexed in matchedColors.Keys)
         }
     }
 }
