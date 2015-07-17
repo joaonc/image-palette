@@ -67,7 +67,7 @@ namespace ImagePalette
 
         /// <summary>
         /// Whether or not to serialize the Alpha value.
-        /// Use by XML Serialization automatically.
+        /// Used by XML Serialization automatically.
         /// </summary>
         /// <returns></returns>
         public bool ShouldSerializeA() { return A < 0xFF; }
