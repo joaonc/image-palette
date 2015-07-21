@@ -47,6 +47,8 @@
             this.labelCoverage = new System.Windows.Forms.Label();
             this.numericUpDownCoverage = new System.Windows.Forms.NumericUpDown();
             this.labelCoveragePercentage = new System.Windows.Forms.Label();
+            this.buttonLoadSettings = new System.Windows.Forms.Button();
+            this.buttonSaveSettings = new System.Windows.Forms.Button();
             this.groupBoxReference.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdIndexed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownThresholdMatched)).BeginInit();
@@ -81,7 +83,7 @@
             this.buttonGo.Location = new System.Drawing.Point(371, 315);
             this.buttonGo.Name = "buttonGo";
             this.buttonGo.Size = new System.Drawing.Size(75, 23);
-            this.buttonGo.TabIndex = 7;
+            this.buttonGo.TabIndex = 9;
             this.buttonGo.Text = "Go";
             this.buttonGo.UseVisualStyleBackColor = true;
             this.buttonGo.Click += new System.EventHandler(this.buttonGo_Click);
@@ -93,7 +95,7 @@
             this.buttonExit.Location = new System.Drawing.Point(452, 315);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(75, 23);
-            this.buttonExit.TabIndex = 8;
+            this.buttonExit.TabIndex = 10;
             this.buttonExit.Text = "Exit";
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
@@ -270,6 +272,26 @@
             this.labelCoveragePercentage.TabIndex = 4;
             this.labelCoveragePercentage.Text = "%";
             // 
+            // buttonLoadSettings
+            // 
+            this.buttonLoadSettings.Location = new System.Drawing.Point(13, 315);
+            this.buttonLoadSettings.Name = "buttonLoadSettings";
+            this.buttonLoadSettings.Size = new System.Drawing.Size(99, 23);
+            this.buttonLoadSettings.TabIndex = 7;
+            this.buttonLoadSettings.Text = "Load Settings";
+            this.buttonLoadSettings.UseVisualStyleBackColor = true;
+            this.buttonLoadSettings.Click += new System.EventHandler(this.buttonLoadSettings_Click);
+            // 
+            // buttonSaveSettings
+            // 
+            this.buttonSaveSettings.Location = new System.Drawing.Point(118, 315);
+            this.buttonSaveSettings.Name = "buttonSaveSettings";
+            this.buttonSaveSettings.Size = new System.Drawing.Size(99, 23);
+            this.buttonSaveSettings.TabIndex = 8;
+            this.buttonSaveSettings.Text = "Save Settings";
+            this.buttonSaveSettings.UseVisualStyleBackColor = true;
+            this.buttonSaveSettings.Click += new System.EventHandler(this.buttonSaveSettings_Click);
+            // 
             // FormImagePalette
             // 
             this.AcceptButton = this.buttonGo;
@@ -277,6 +299,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonExit;
             this.ClientSize = new System.Drawing.Size(539, 350);
+            this.Controls.Add(this.buttonSaveSettings);
+            this.Controls.Add(this.buttonLoadSettings);
             this.Controls.Add(this.labelCoveragePercentage);
             this.Controls.Add(this.numericUpDownCoverage);
             this.Controls.Add(this.labelCoverage);
@@ -321,6 +345,8 @@
         private System.Windows.Forms.Label labelThresholdIndexed;
         private System.Windows.Forms.Label labelThresholdIndexedPercent;
         private System.Windows.Forms.NumericUpDown numericUpDownThresholdIndexed;
+        private System.Windows.Forms.Button buttonLoadSettings;
+        private System.Windows.Forms.Button buttonSaveSettings;
     }
 }
 

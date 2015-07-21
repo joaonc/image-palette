@@ -13,6 +13,7 @@ namespace ImagePalette
     public partial class FormImagePalette : Form
     {
         ImagePaletteParameters parameters;
+        string sampleSettingsFile = @"..\..\Samples\parameters-input-1.xml";
 
         public FormImagePalette()
         {
@@ -23,14 +24,18 @@ namespace ImagePalette
         {
             // Set defaults
             parameters = new ImagePaletteParameters();
-            parameters.FileNames = new List<string>(new string[] { @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\CCMG707.jpg" });
-            parameters.FileNameReference = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\colors-blog-cr.csv";
-            parameters.FileNameOutput = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\output.xml";
+#if DEBUG
+            parameters = (ImagePaletteParameters)Util.DeserializeFromXmlFile(sampleSettingsFile, parameters.GetType());
+            //parameters.FileNames = new List<string>(new string[] { @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\CCMG707.jpg" });
+            //parameters.FileNameReference = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\colors-blog-cr.csv";
+            //parameters.FileNameOutput = @"C:\Users\Joao\Documents\Visual Studio 2012\Projects\ImagePalette\Resources\output.xml";
+#else
             parameters.Coverage = 100;
             parameters.Distance = 1000;
             parameters.ThresholdIndexed = 8;
             parameters.ThresholdMatched = 10;
             parameters.ExploreMode = true;
+#endif
 
             // Set UI bindings
             try
@@ -99,6 +104,48 @@ namespace ImagePalette
         private void checkBoxIncludeReference_CheckedChanged(object sender, EventArgs e)
         {
             groupBoxReference.Enabled = checkBoxIncludeReference.Checked;
+        }
+
+        private void buttonLoadSettings_Click(object sender, EventArgs e)
+        {
+            string fileName = "";
+
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+                fileName = sampleSettingsFile;
+            else
+            {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                openFileDialog.Filter = "XML|*.xml|All files|*.*";
+                openFileDialog.Title = "Load Settings";
+                openFileDialog.CheckFileExists = true;
+                openFileDialog.Multiselect = false;
+                openFileDialog.ShowDialog();
+
+                fileName = openFileDialog.FileName;
+            }
+
+            if (!string.IsNullOrEmpty(fileName))
+                parameters = (ImagePaletteParameters)Util.DeserializeFromXmlFile(fileName, parameters.GetType());
+        }
+
+        private void buttonSaveSettings_Click(object sender, EventArgs e)
+        {
+            string fileName = "";
+
+            if ((ModifierKeys & Keys.Control) == Keys.Control)
+                fileName = sampleSettingsFile;
+            else
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "XML|*.xml|All files|*.*";
+                saveFileDialog.Title = "Save Settings";
+                saveFileDialog.ShowDialog();
+
+                fileName = saveFileDialog.FileName;
+            }
+            
+            if (!string.IsNullOrEmpty(fileName))
+                Util.SerializeToXmlFile(parameters, fileName);
         }
     }
 }

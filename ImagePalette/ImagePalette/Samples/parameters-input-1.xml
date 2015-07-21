@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImagePaletteParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FileNames>
+    <string>..\..\Samples\cheese.jpg</string>
+  </FileNames>
+  <FileNameReference>..\..\Samples\color-input-1.csv</FileNameReference>
+  <FileNameOutput>..\..\Samples\output.xml</FileNameOutput>
+  <Coverage>100</Coverage>
+  <Distance>1000</Distance>
+  <ThresholdIndexed>8</ThresholdIndexed>
+  <ThresholdMatched>10</ThresholdMatched>
+  <ApplyThresholdDistance>false</ApplyThresholdDistance>
+  <ApplyThresholdIndexed>false</ApplyThresholdIndexed>
+  <ApplyThresholdMatched>false</ApplyThresholdMatched>
+  <ExploreMode>true</ExploreMode>
+</ImagePaletteParameters>
